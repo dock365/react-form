@@ -1,0 +1,46 @@
+{
+  "name": "@braces/react-form",
+  "version": "0.0.1",
+  "description": "React components for form and input field management",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "clean": "rm -rf dist/*",
+    "build": "npm run clean && tsc",
+    "build-watch": "tsc --watch",
+    "patch-release": "npm version patch && npm publish --access=public && git push --follow-tags",
+    "minor-release": "npm version minor && npm publish --access=public && git push --follow-tags",
+    "major-release": "npm version major && npm publish --access=public && git push --follow-tags",
+    "test": "mocha -r ts-node/register --watch-extensions ts,tsx --watch 'test/**/*.spec.ts' 'src/**/*.ts'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codebraces/react-form.git"
+  },
+  "keywords": [
+    "react",
+    "form",
+    "input"
+  ],
+  "author": "Hafeez Hamza <hafeez1042@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/codebraces/react-form/issues"
+  },
+  "homepage": "https://github.com/codebraces/react-form#readme",
+  "devDependencies": {
+    "@types/chai": "^4.1.4",
+    "@types/mocha": "^5.2.5",
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "typescript": "^3.0.1"
+  },
+  "dependencies": {
+    "@types/react": "^15.5.8",
+    "@types/react-dom": "^15.5.8",
+    "react": "^15.5.8",
+    "react-dom": "^15.5.8"
+  }
+}
