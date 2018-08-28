@@ -5,12 +5,13 @@ export interface IField {
   name: string;
   label?: string;
   defaultValue?: string | any;
+  placeholder?: string;
   element?: (props: IInputProps) => JSX.Element;
 }
 
 export interface IFormProps {
   fields: IField[];
-  submit?: JSX.Element;
+  submitElement?: JSX.Element;
   onSubmit?: (values: any) => any; // TODO: type defnition
 }
 
@@ -22,6 +23,7 @@ export interface IFieldValue {
 
 export interface IFormState {
   fieldValues: IFieldValue[];
+  submittable: boolean;
 }
 
 export class Form extends React.Component<IFormProps, IFormState> {
@@ -30,6 +32,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
 
     this.state = {
       fieldValues: [],
+      submittable: false,
     };
 
     this._onSubmit = this._onSubmit.bind(this);
@@ -51,7 +54,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
     return (
       <form onSubmit={this._onSubmit}>
         {this._fields()}
-        {this.props.submit || <button>Submit</button>}
+        {this.props.submitElement || <button>Submit</button>}
       </form >
     );
   }
@@ -60,26 +63,33 @@ export class Form extends React.Component<IFormProps, IFormState> {
     if (this.state.fieldValues.length > 0) {
       return this.props.fields.map((field, i) => {
         const fieldValue = this.state.fieldValues.find((item: IFieldValue) => field.name === item.field);
-        return <Input
-          key={field.name}
-          label={field.label}
-          errors={fieldValue && fieldValue.errors}
-          input={{
+        const props: IInputProps = {
+          label: field.label,
+          errors: fieldValue && fieldValue.errors,
+          input: {
             onChange: (e) => {
               this.setState({
                 fieldValues: this.state.fieldValues.map((item: IFieldValue) =>
                   field.name === item.field ? { ...item, value: e.target.value } : item),
               });
             },
+            onBlur: (e) => {
+
+            },
             value: fieldValue && fieldValue.value || "",
-          }} />;
+            placeholder: field.placeholder,
+          }
+        }
+        return field.element && field.element(props) || <Input {...props} />;
       });
     }
   }
 
   private _onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log("Submitted")
-  }
 
+    if (this.props.onSubmit) {
+      this.props.onSubmit(this.state.fieldValues);
+    }
+  }
 }
