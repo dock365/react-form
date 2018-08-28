@@ -1,5 +1,5 @@
 # React Form
-[![Build Status](https://travis-ci.org/codebraces/react-form.svg?branch=master)](https://travis-ci.org/codebraces/react-form)
+<!-- [![Build Status](https://travis-ci.org/codebraces/react-form.svg?branch=master)](https://travis-ci.org/codebraces/react-form) -->
 [![npm Version](https://img.shields.io/npm/v/@braces/react-form.svg)](https://www.npmjs.com/package/@braces/react-form)
 
 
@@ -52,4 +52,4 @@ All contributions are super welcome!
 
 ## License
 
-Validator is MIT licensed.
+React Form is MIT licensed.
