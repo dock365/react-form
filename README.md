@@ -1,30 +1,30 @@
 # React Form
-[![Build Status](https://travis-ci.org/codebraces/validator.svg?branch=master)](https://travis-ci.org/codebraces/validator)
-[![npm Version](https://img.shields.io/npm/v/@braces/validator.svg)](https://www.npmjs.com/package/@braces/validator)
+[![Build Status](https://travis-ci.org/codebraces/react-form.svg?branch=master)](https://travis-ci.org/codebraces/react-form)
+[![npm Version](https://img.shields.io/npm/v/@braces/react-form.svg)](https://www.npmjs.com/package/@braces/react-form)
 
 
 ## Install
-1 Install react from as dependancy
+1 Install react form as dependency
   ```bash
   # Using yarn package manager
-  $ yarn add @braces/react-from
+  $ yarn add @braces/react-form
 
   # Using npm package manager
-  $ npm install --save @braces/react-from
+  $ npm install --save @braces/react-form
   ```
-2 Import React from module
+2 Import React form module
   ```javascript
   // ES6
-  import { From } from "@braces/react-form"
+  import { Form } from "@braces/react-form"
 
   // ES5
-  var From = require("react-table").From;
+  var Form = require("react-table").Form;
   ```
 ## Example
 
 ```javascript
   import React from "react";
-  import { From } from "@braces/react-form";
+  import { Form } from "@braces/react-form";
 
   export default (props) => {
     return (
