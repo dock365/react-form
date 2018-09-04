@@ -1,18 +1,27 @@
 import React, { FormEvent } from "react";
 import Input, { IInputProps } from "../Input";
+import { IValidationFailMessages, IStringValidationOptions } from "@braces/validator";
+import Validator from "@braces/validator";
 
 export interface IField {
   name: string;
   label?: string;
   defaultValue?: string | any;
   placeholder?: string;
+  onChange?: (e: FormEvent<HTMLInputElement>) => any;
+  onBlur?: (e: FormEvent<HTMLInputElement>) => any;
   element?: (props: IInputProps) => JSX.Element;
+  validationMessages?: IValidationFailMessages;
+  validationRules?: IStringValidationOptions;
 }
 
 export interface IFormProps {
   fields: IField[];
   submitElement?: JSX.Element;
-  onSubmit?: (values: any) => any; // TODO: type defnition
+  onSubmit?: (e: FormEvent<HTMLFormElement>, values: IFieldValue[]) => any; // TODO: type defnition
+  onBlur?: (e: FormEvent<HTMLFormElement>, values: IFieldValue[]) => any; // TODO: type defnition
+  onChange?: (e: FormEvent<HTMLFormElement>, values: IFieldValue[]) => any; // TODO: type defnition
+  validationMessages?: IValidationFailMessages
 }
 
 export interface IFieldValue {
@@ -27,6 +36,7 @@ export interface IFormState {
 }
 
 export class Form extends React.Component<IFormProps, IFormState> {
+  private validator: Validator;
   constructor(props: IFormProps) {
     super(props);
 
@@ -35,7 +45,13 @@ export class Form extends React.Component<IFormProps, IFormState> {
       submittable: false,
     };
 
+    this.validator = new Validator({
+      failMessages: this.props.validationMessages
+    });
+
     this._onSubmit = this._onSubmit.bind(this);
+    this._onFormChange = this._onFormChange.bind(this);
+    this._onFormBlur = this._onFormBlur.bind(this);
   }
 
   public componentDidMount() {
@@ -52,7 +68,11 @@ export class Form extends React.Component<IFormProps, IFormState> {
 
   public render() {
     return (
-      <form onSubmit={this._onSubmit}>
+      <form
+        onSubmit={this._onSubmit}
+        onChange={this._onFormChange}
+        onBlur={this._onFormBlur}
+      >
         {this._fields()}
         {this.props.submitElement || <button>Submit</button>}
       </form >
@@ -68,13 +88,30 @@ export class Form extends React.Component<IFormProps, IFormState> {
           errors: fieldValue && fieldValue.errors,
           input: {
             onChange: (e) => {
+              let errors: string[] = [];
+              if (field.validationRules) {
+                errors = this.validator.string(field.label || field.name, e.target.value, field.validationRules).messages;
+              }
               this.setState({
-                fieldValues: this.state.fieldValues.map((item: IFieldValue) =>
-                  field.name === item.field ? { ...item, value: e.target.value } : item),
+                fieldValues: this.state.fieldValues.map((item: IFieldValue) => {
+                  if (field.name === item.field) {
+                    return {
+                      ...item,
+                      value: e.target.value,
+                      errors,
+                    }
+                  }
+                  return item;
+                })
               });
+              if (field.onChange) {
+                field.onChange(e);
+              }
             },
             onBlur: (e) => {
-
+              if (field.onBlur) {
+                field.onBlur(e);
+              }
             },
             value: fieldValue && fieldValue.value || "",
             placeholder: field.placeholder,
@@ -85,11 +122,23 @@ export class Form extends React.Component<IFormProps, IFormState> {
     }
   }
 
+  private _onFormChange(e: FormEvent<HTMLFormElement>) {
+    if (this.props.onChange) {
+      this.props.onChange(e, this.state.fieldValues);
+    }
+  }
+
+  private _onFormBlur(e: FormEvent<HTMLFormElement>) {
+    if (this.props.onBlur) {
+      this.props.onBlur(e, this.state.fieldValues);
+    }
+  }
+
   private _onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     if (this.props.onSubmit) {
-      this.props.onSubmit(this.state.fieldValues);
+      this.props.onSubmit(e, this.state.fieldValues);
     }
   }
 }
