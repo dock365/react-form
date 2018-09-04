@@ -42,7 +42,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
 
     this.state = {
       fieldValues: [],
-      submittable: false,
+      submittable: true,
     };
 
     this.validator = new Validator({
@@ -90,7 +90,8 @@ export class Form extends React.Component<IFormProps, IFormState> {
             onChange: (e) => {
               let errors: string[] = [];
               if (field.validationRules) {
-                errors = this.validator.string(field.label || field.name, e.target.value, field.validationRules).messages;
+                const validation = this.validator.string(field.label || field.name, e.target.value, field.validationRules);
+                errors = validation.messages
               }
               this.setState({
                 fieldValues: this.state.fieldValues.map((item: IFieldValue) => {
@@ -136,8 +137,11 @@ export class Form extends React.Component<IFormProps, IFormState> {
 
   private _onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
-    if (this.props.onSubmit) {
+    let hasErrors: boolean = false;
+    this.state.fieldValues.forEach(({ errors }) => {
+      hasErrors = errors && errors.length > 0 || hasErrors;
+    })
+    if (this.props.onSubmit && this.state.submittable && !hasErrors) {
       this.props.onSubmit(e, this.state.fieldValues);
     }
   }
