@@ -11,7 +11,7 @@ const Input: React.SFC<IInputProps> = ({ label, input, errors }) => {
     <div>
       {label ? <label>{label}</label> : null }
       <input {...input} />
-      {errors && errors.map((error, i) => <p key={i}>{error}</p>)}
+      {errors && errors.map((error, i) => <p key={i} className="validation-errors">{error}</p>)}
     </div>
   );
 };

@@ -34,6 +34,11 @@
             name: "fullname",
             label: "Full name",
             placeholder: "Enter full name here",
+            validationRules: {
+              minLength: 3,
+              maxLength: 15,
+              noTrailingSpace: true,
+            }
           }, {
             name: "email",
             label: "Email",
