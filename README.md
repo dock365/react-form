@@ -18,7 +18,7 @@
   import { Form } from "@braces/react-form"
 
   // ES5
-  var Form = require("react-table").Form;
+  var Form = require("@braces/react-form").Form;
   ```
 ## Example
 
