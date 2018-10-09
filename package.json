@@ -38,9 +38,11 @@
     "typescript": "^3.0.1"
   },
   "dependencies": {
-    "@braces/validator": "^0.2.1",
+    "@braces/validator": "^0.2.3",
     "@types/react": "^15.5.8",
     "@types/react-dom": "^15.5.8",
+    "create-react-context": "^0.2.3",
+    "prop-types": "^15.6.2",
     "react": "^15.5.8",
     "react-dom": "^15.5.8"
   }
