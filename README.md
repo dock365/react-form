@@ -24,29 +24,27 @@
 
 ```javascript
   import React from "react";
-  import { Form } from "@braces/react-form";
+  import { Form, Field } from "@braces/react-form";
 
   export default (props) => {
     return (
-      <Form
-        fields={[
-          {
-            name: "fullname",
-            label: "Full name",
-            placeholder: "Enter full name here",
-            validationRules: {
-              minLength: 3,
-              maxLength: 15,
-              noTrailingSpace: true,
-            }
-          }, {
-            name: "email",
-            label: "Email",
-            placeholder: "Enter email here",
-          }
-        ]}
-        onSubmit={(values) => console.log(values)}
-      />
+      <Form onSubmit={(e, values) => console.log(values)} validateOn={1}>
+        <Field name="test1" render={(props) => (
+          <div>
+            <input {...props.input} />
+            <ul>
+              {props.errors.map((error, i) => <li key={i}>{error}</li>)}
+            </ul>
+          </div>
+        )}
+          validationRules={{
+            required: true,
+            maxLength: 10,
+          }} />
+        <Field name="test2" render={(props) => <input {...props.input} />} />
+        <Field name="test3" render={(props) => <input {...props.input} />} />
+        <button>Submit</button>
+      </Form>
     );
   };
 ```

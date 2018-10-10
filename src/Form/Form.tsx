@@ -109,14 +109,24 @@ export class Form extends React.Component<IFormProps, IFormState> {
       fieldValue.value = value;
       this.setState(prevState => {
         return {
-          fields: [...prevState.fields, fieldValue]
+          fields: prevState.fields.map(item => item.name === fieldValue.name ? { ...fieldValue } : item)
         }
       })
+      if (this.props.validateOn === ValidateOnTypes.FieldChange) {
+        this._validateField(fieldValue);
+      }
     }
   }
 
   private _onFieldBlur(e: React.MouseEvent<HTMLInputElement>, name: string) {
-    // debugger;
+    const value = e.currentTarget.value;
+    const fieldValue = this.state.fields.find(item => item.name === name);
+    if (fieldValue) {
+      fieldValue.value = value;
+      if (this.props.validateOn === ValidateOnTypes.FieldBlur) {
+        this._validateField(fieldValue);
+      }
+    }
   }
 
   private _onFormChange(e: FormEvent<HTMLFormElement>) {
@@ -161,14 +171,19 @@ export class Form extends React.Component<IFormProps, IFormState> {
       this.setState(prevState => {
         return {
           fields: [
-            ...prevState.fields,
-            { ...field, errors: result.messages }
+            ...prevState.fields.map(item => item.name === field.name ? { ...item, errors: result.messages } : item)
           ],
-          hasError: true,
         }
       });
       return false;
     }
+    this.setState(prevState => {
+      return {
+        fields: [
+          ...prevState.fields.map(item => item.name === field.name ? { ...item, errors: [] } : item)
+        ],
+      }
+    });
     return true;
   }
 }
