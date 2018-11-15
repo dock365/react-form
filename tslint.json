@@ -1,26 +1,29 @@
 {
     "defaultSeverity": "error",
-    "extends": [
-    ],
+    "extends": [],
     "jsRules": {
         "align": {
             "options": [
                 "parameters",
                 "statements",
-            ],
+            ]
         },
         "class-name": true,
         "curly": true,
         "eofline": true,
         "forin": true,
         "import-spacing": true,
-        "indent":  {
-            "options": ["spaces"],
+        "indent": {
+            "options": [
+                "spaces"
+            ],
         },
         "jsdoc-format": true,
         "label-position": true,
         "max-line-length": {
-            "options": [120],
+            "options": [
+                120
+            ],
         },
         "new-parens": true,
         "no-arg": true,
@@ -54,7 +57,9 @@
             ],
         },
         "one-variable-per-declaration": {
-            "options": ["ignore-for-loop"],
+            "options": [
+                "ignore-for-loop"
+            ],
         },
         "quotemark": {
             "options": [
@@ -64,7 +69,9 @@
         },
         "radix": true,
         "semicolon": {
-            "options": ["always"],
+            "options": [
+                "always"
+            ],
         },
         "space-before-function-paren": {
             "options": {
@@ -82,7 +89,9 @@
             },
         },
         "triple-equals": {
-            "options": ["allow-null-check"],
+            "options": [
+                "allow-null-check"
+            ],
         },
         "use-isnan": true,
         "variable-name": {
@@ -101,7 +110,7 @@
                 "check-type",
                 "check-typecast",
             ],
-    },
+        },
     },
     "rules": {
         "adjacent-overload-signatures": true,
