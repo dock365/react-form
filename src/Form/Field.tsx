@@ -26,7 +26,7 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
       <FormContext.Consumer >
         {({ fields, onChange, onBlur, initialize }) => {
           const field = fields.find((item: any) => item.name === this.props.name);
-          if(!field) {
+          if (!field) {
             initialize(this.props.name, this.props.validationRules);
             return null
           }
