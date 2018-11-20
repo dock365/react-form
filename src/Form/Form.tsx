@@ -120,6 +120,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
 
   private _onFieldBlur(e: React.MouseEvent<HTMLInputElement>, name: string) {
     const value = e.currentTarget.value;
+
     const fieldValue = this.state.fields.find(item => item.name === name);
     if (fieldValue) {
       fieldValue.value = value;
@@ -166,24 +167,26 @@ export class Form extends React.Component<IFormProps, IFormState> {
   }
 
   private _validateField(field: IField) {
-    const result = this.validator.string(field.name, field.value, field.validationRules);
-    if (!result.success) {
+    if (field.validationRules) {
+      const result = this.validator.string(field.name, field.value, field.validationRules);
+      if (!result.success) {
+        this.setState(prevState => {
+          return {
+            fields: [
+              ...prevState.fields.map(item => item.name === field.name ? { ...item, errors: result.messages } : item)
+            ],
+          }
+        });
+        return false;
+      }
       this.setState(prevState => {
         return {
           fields: [
-            ...prevState.fields.map(item => item.name === field.name ? { ...item, errors: result.messages } : item)
+            ...prevState.fields.map(item => item.name === field.name ? { ...item, errors: [] } : item)
           ],
         }
       });
-      return false;
     }
-    this.setState(prevState => {
-      return {
-        fields: [
-          ...prevState.fields.map(item => item.name === field.name ? { ...item, errors: [] } : item)
-        ],
-      }
-    });
     return true;
   }
 }
