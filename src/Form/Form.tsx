@@ -102,11 +102,10 @@ export class Form extends React.Component<IFormProps, IFormState> {
     }
   }
 
-  private _onFieldChange(e: React.MouseEvent<HTMLInputElement>, name: string) {
-    const value = e.currentTarget.value;
+  private _onFieldChange(value: string | number | boolean | React.MouseEvent<HTMLInputElement>, name: string, e: React.MouseEvent<HTMLInputElement>) {
     const fieldValue = this.state.fields.find(item => item.name === name);
     if (fieldValue) {
-      fieldValue.value = value;
+      fieldValue.value = typeof value === "object" ? value.currentTarget.value : value;
       this.setState(prevState => {
         return {
           fields: prevState.fields.map(item => item.name === fieldValue.name ? { ...fieldValue } : item)
@@ -118,11 +117,12 @@ export class Form extends React.Component<IFormProps, IFormState> {
     }
   }
 
-  private _onFieldBlur(e: React.MouseEvent<HTMLInputElement>, name: string) {
-    const value = e.currentTarget.value;
+  private _onFieldBlur(value: string | number | boolean | React.MouseEvent<HTMLInputElement>, name: string, e: React.MouseEvent<HTMLInputElement>) {
     const fieldValue = this.state.fields.find(item => item.name === name);
     if (fieldValue) {
-      fieldValue.value = value;
+      console.log({value});
+
+      fieldValue.value = typeof value === "object" ? value.currentTarget.value : value;
       if (this.props.validateOn === ValidateOnTypes.FieldBlur) {
         this._validateField(fieldValue);
       }
