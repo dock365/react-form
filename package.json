@@ -1,6 +1,6 @@
 {
-  "name": "@braces/react-form",
-  "version": "0.1.2",
+  "name": "@dock365/react-form",
+  "version": "0.3.1",
   "description": "React components for form and input field management",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -28,22 +28,26 @@
     "url": "https://github.com/codebraces/react-form/issues"
   },
   "homepage": "https://github.com/codebraces/react-form#readme",
+  "peerDependencies": {
+    "react": ">= 15.5.8",
+    "react-dom": ">= 15.5.8"
+  },
   "devDependencies": {
     "@types/chai": "^4.1.4",
     "@types/mocha": "^5.2.5",
+    "@types/react": "^15.6.19",
+    "@types/react-dom": "^15.5.8",
     "chai": "^4.1.2",
     "mocha": "^5.2.0",
+    "react": "^15.6.2",
+    "react-dom": "^15.6.2",
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
     "typescript": "^3.0.1"
   },
   "dependencies": {
     "@braces/validator": "^0.2.3",
-    "@types/react": "^15.5.8",
-    "@types/react-dom": "^15.5.8",
     "create-react-context": "^0.2.3",
-    "prop-types": "^15.6.2",
-    "react": "^15.5.8",
-    "react-dom": "^15.5.8"
+    "prop-types": "^15.6.2"
   }
 }
