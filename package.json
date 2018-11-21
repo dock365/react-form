@@ -48,6 +48,7 @@
   },
   "dependencies": {
     "@braces/validator": "^0.2.3",
+    "@dock365/validator": "^0.8.0",
     "create-react-context": "^0.2.3",
     "prop-types": "^15.6.2"
   }

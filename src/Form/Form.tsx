@@ -1,5 +1,13 @@
 import React, { FormEvent } from "react";
-import Validator, { IValidationFailMessages, IStringValidationOptions, INumberValidationOptions, IDateValidationOptions, IEmailValidationOptions, validationTypes, IValidationResponse } from "@braces/validator";
+import Validator, {
+  IValidationFailMessages,
+  IStringValidationOptions,
+  INumberValidationOptions,
+  IDateValidationOptions,
+  IEmailValidationOptions,
+  validationTypes,
+  IValidationResponse,
+} from "@dock365/validator";
 import createReactContext, { Context, ProviderProps } from 'create-react-context';
 
 export enum ValidateOnTypes {
@@ -9,7 +17,6 @@ export enum ValidateOnTypes {
 }
 
 export interface IFormProps {
-  // fields: IField[];
   submitElement?: JSX.Element;
   onSubmit?: (e: FormEvent<HTMLFormElement>, values: ISubmitValues) => void;
   onBlur?: (e: FormEvent<HTMLFormElement>, values: ISubmitValues) => void;
@@ -22,7 +29,12 @@ export interface ISubmitValues {
   [name: string]: string | number | boolean;
 }
 
-export type validationRules = (IStringValidationOptions & { type: validationTypes.String }) | (INumberValidationOptions & { type: validationTypes.Number }) | (IDateValidationOptions & { type: validationTypes.Date }) | (IEmailValidationOptions & { type: validationTypes.Email })
+export type validationRules =
+  (IStringValidationOptions & { type: validationTypes.String }) |
+  (INumberValidationOptions & { type: validationTypes.Number }) |
+  (IDateValidationOptions & { type: validationTypes.Date }) |
+  (IEmailValidationOptions & { type: validationTypes.Email });
+
 export interface IField {
   name: string;
   value?: any;
@@ -31,18 +43,26 @@ export interface IField {
 }
 
 export interface IFormState {
-  fields: IField[],
+  fields: IField[];
   hasError: boolean;
 }
 
 export interface IFormContext {
-  onChange?: (value: string | number | boolean | React.MouseEvent<HTMLInputElement>, name: string, e?: React.MouseEvent<HTMLInputElement>) => void;
-  onBlur?: (value: string | number | boolean | React.MouseEvent<HTMLInputElement>, name: string, e?: React.MouseEvent<HTMLInputElement>) => void;
+  onChange?: (
+    value: string | number | boolean | React.MouseEvent<HTMLInputElement>,
+    name: string,
+    e?: React.MouseEvent<HTMLInputElement>,
+  ) => void;
+  onBlur?: (
+    value: string | number | boolean | React.MouseEvent<HTMLInputElement>,
+    name: string,
+    e?: React.MouseEvent<HTMLInputElement>,
+  ) => void;
   fields?: IField[];
   initialize?: (name: string, validationRules?: validationRules) => void;
 }
 
-export const FormContext: Context<IFormContext> = createReactContext({})
+export const FormContext: Context<IFormContext> = createReactContext({});
 
 export class Form extends React.Component<IFormProps, IFormState> {
   private validator: Validator;
@@ -56,7 +76,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
     };
 
     this.validator = new Validator({
-      failMessages: this.props.validationMessages
+      failMessages: this.props.validationMessages,
     });
 
     this._initializeField = this._initializeField.bind(this);
@@ -66,10 +86,6 @@ export class Form extends React.Component<IFormProps, IFormState> {
     this._onSubmit = this._onSubmit.bind(this);
     this._onFormChange = this._onFormChange.bind(this);
     this._onFormBlur = this._onFormBlur.bind(this);
-  }
-
-  public componentDidMount() {
-
   }
 
   public render() {
@@ -84,7 +100,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
           onSubmit={this._onSubmit}
           onChange={this._onFormChange}
           onBlur={this._onFormBlur}
-          ref={ref => { this.form = ref }}
+          ref={ref => { this.form = ref; }}
         >
           {this.props.children}
         </form >
@@ -92,7 +108,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
     );
   }
 
-  private _initializeField(name: string, validationRules?: validationRules) {
+  private _initializeField(name: string, _validationRules?: validationRules) {
     const fieldValue = this.state.fields.find(item => item.name === name);
     if (name && !fieldValue) {
       this.setState(prevState => ({
@@ -100,31 +116,39 @@ export class Form extends React.Component<IFormProps, IFormState> {
           ...prevState.fields,
           {
             name,
-            validationRules,
+            validationRules: _validationRules,
             value: "",
             errors: [],
-          }
-        ]
-      }))
+          },
+        ],
+      }));
     }
   }
 
-  private _onFieldChange(value: string | number | boolean | React.MouseEvent<HTMLInputElement>, name: string, e?: React.MouseEvent<HTMLInputElement>) {
+  private _onFieldChange(
+    value: string | number | boolean | React.MouseEvent<HTMLInputElement>,
+    name: string,
+    e?: React.MouseEvent<HTMLInputElement>,
+  ) {
     const fieldValue = this.state.fields.find(item => item.name === name);
     if (fieldValue) {
       fieldValue.value = typeof value === "object" ? value.currentTarget.value : value;
       this.setState(prevState => {
         return {
-          fields: prevState.fields.map(item => item.name === fieldValue.name ? { ...fieldValue } : item)
-        }
-      })
+          fields: prevState.fields.map(item => item.name === fieldValue.name ? { ...fieldValue } : item),
+        };
+      });
       if (this.props.validateOn === ValidateOnTypes.FieldChange) {
         this._validateField(fieldValue);
       }
     }
   }
 
-  private _onFieldBlur(value: string | number | boolean | React.MouseEvent<HTMLInputElement>, name: string, e?: React.MouseEvent<HTMLInputElement>) {
+  private _onFieldBlur(
+    value: string | number | boolean | React.MouseEvent<HTMLInputElement>,
+    name: string,
+    e?: React.MouseEvent<HTMLInputElement>,
+  ) {
     const fieldValue = this.state.fields.find(item => item.name === name);
     if (fieldValue) {
       fieldValue.value = typeof value === "object" ? value.currentTarget.value : value;
@@ -150,24 +174,25 @@ export class Form extends React.Component<IFormProps, IFormState> {
     e.preventDefault();
     if (this.props.validateOn === ValidateOnTypes.Submit) {
       this._validateAll(() => {
-        this.props.onSubmit && this.props.onSubmit(e, this._structuredValues())
-      })
+        if (this.props.onSubmit)
+          this.props.onSubmit(e, this._structuredValues());
+      });
     } else {
-      !this.state.hasError &&
-        this.props.onSubmit &&
-        this.props.onSubmit(e, this._structuredValues())
+      if (!this.state.hasError && this.props.onSubmit)
+        this.props.onSubmit(e, this._structuredValues());
     }
   }
 
   private _structuredValues(): ISubmitValues {
     const values: ISubmitValues = {};
-    this.state.fields.forEach(field => values[field.name] = field.value)
+    this.state.fields.forEach(field => values[field.name] = field.value);
+
     return values;
   }
 
-  private _validateAll(cb: Function) {
+  private _validateAll(cb: () => void) {
     if (this.state.fields.every(field => this._validateField(field)))
-      cb()
+      cb();
   }
 
   private _validateField(field: IField) {
@@ -191,27 +216,29 @@ export class Form extends React.Component<IFormProps, IFormState> {
           result = {
             success: true,
             messages: [],
-          }
+          };
           break;
       }
       if (!result.success) {
         this.setState(prevState => {
           return {
             fields: [
-              ...prevState.fields.map(item => item.name === field.name ? { ...item, errors: result.messages } : item)
+              ...prevState.fields.map(item => item.name === field.name ? { ...item, errors: result.messages } : item),
             ],
-          }
+          };
         });
+
         return false;
       }
       this.setState(prevState => {
         return {
           fields: [
-            ...prevState.fields.map(item => item.name === field.name ? { ...item, errors: [] } : item)
+            ...prevState.fields.map(item => item.name === field.name ? { ...item, errors: [] } : item),
           ],
-        }
+        };
       });
     }
+
     return true;
   }
 }
