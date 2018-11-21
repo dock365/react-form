@@ -191,7 +191,9 @@ export class Form extends React.Component<IFormProps, IFormState> {
   }
 
   private _validateAll(cb: () => void) {
-    if (this.state.fields.every(field => this._validateField(field)))
+    let success = true;
+    this.state.fields.forEach(field => { success = success && this._validateField(field); });
+    if (success)
       cb();
   }
 
