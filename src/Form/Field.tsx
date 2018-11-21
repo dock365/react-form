@@ -1,11 +1,30 @@
 import * as React from 'react';
 import { FormContext, validationRules } from './Form';
+
+export interface IFieldRenderProps {
+  input: {
+    name: string;
+    placeholder?: string;
+    defaultValue?: string | number | boolean;
+    value?: string | number | boolean;
+    onChange?: (
+      value: number | string | boolean | React.MouseEvent<HTMLInputElement>,
+      e?: React.MouseEvent<HTMLInputElement>,
+    ) => void;
+    onBlur?: (
+      value: number | string | boolean | React.MouseEvent<HTMLInputElement>,
+      e?: React.MouseEvent<HTMLInputElement>,
+    ) => void;
+  };
+  label?: string;
+  errors?: string[];
+}
 export interface IFieldProps {
   name: string;
   label?: string;
   placeholder?: string;
   defaultValue?: string;
-  render: (props: any) => JSX.Element;
+  render: (props: IFieldRenderProps) => JSX.Element;
   onChange?: (value: string) => void;
   onBlur?: (value: string) => void;
   validationRules?: validationRules;
