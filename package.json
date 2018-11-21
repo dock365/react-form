@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/codebraces/react-form.git"
+    "url": "git+https://github.com/dock365/react-form.git"
   },
   "keywords": [
     "react",
@@ -25,9 +25,9 @@
   "author": "Hafeez Hamza <hafeez1042@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/codebraces/react-form/issues"
+    "url": "https://github.com/dock365/react-form/issues"
   },
-  "homepage": "https://github.com/codebraces/react-form#readme",
+  "homepage": "https://github.com/dock365/react-form#readme",
   "peerDependencies": {
     "react": ">= 15.5.8",
     "react-dom": ">= 15.5.8"
