@@ -1,6 +1,6 @@
 {
   "name": "@dock365/react-form",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "React components for form and input field management",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
