@@ -2,21 +2,19 @@ import * as React from 'react';
 import { FormContext, validationRules } from './Form';
 
 export interface IFieldRenderProps {
-  input: {
-    name: string;
-    placeholder?: string;
-    defaultValue?: string | number | boolean;
-    value?: string | number | boolean;
-    options?: object[];
-    onChange?: (
-      value: number | string | boolean | Date,
-      e?: React.MouseEvent<HTMLInputElement>,
-    ) => void;
-    onBlur?: (
-      value: number | string | boolean | Date,
-      e?: React.MouseEvent<HTMLInputElement>,
-    ) => void;
-  };
+  name: string;
+  placeholder?: string;
+  defaultValue?: string | number | boolean;
+  value?: string | number | boolean;
+  options?: object[];
+  onChange?: (
+    value: number | string | boolean | Date,
+    e?: React.MouseEvent<HTMLInputElement>,
+  ) => void;
+  onBlur?: (
+    value: number | string | boolean | Date,
+    e?: React.MouseEvent<HTMLInputElement>,
+  ) => void;
   label?: string;
   errors?: string[];
 }
@@ -25,7 +23,7 @@ export interface IFieldProps {
   label?: string;
   placeholder?: string;
   defaultValue?: string;
-  render: (props: IFieldRenderProps) => JSX.Element;
+  render: (props: IFieldRenderProps | any) => JSX.Element;
   onChange?: (value: string) => void;
   onBlur?: (value: string) => void;
   validationRules?: validationRules;
@@ -52,21 +50,19 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
 
           return (
             React.createElement(this.props.render, {
-              input: {
-                name: this.props.name,
-                placeholder: this.props.placeholder,
-                defaultValue: this.props.defaultValue,
-                value: field && field.value,
-                options: this.props.options,
-                onChange: (
-                  value: number | string | boolean | Date,
-                  e?: React.MouseEvent<HTMLInputElement>,
-                ) => onChange && onChange(value, this.props.name, e),
-                onBlur: (
-                  value: number | string | boolean | Date,
-                  e?: React.MouseEvent<HTMLInputElement>,
-                ) => onBlur && onBlur(value, this.props.name, e),
-              },
+              name: this.props.name,
+              placeholder: this.props.placeholder,
+              defaultValue: this.props.defaultValue,
+              value: field && field.value,
+              options: this.props.options,
+              onChange: (
+                value: number | string | boolean | Date,
+                e?: React.MouseEvent<HTMLInputElement>,
+              ) => onChange && onChange(value, this.props.name, e),
+              onBlur: (
+                value: number | string | boolean | Date,
+                e?: React.MouseEvent<HTMLInputElement>,
+              ) => onBlur && onBlur(value, this.props.name, e),
               label: this.props.label,
               errors: field && field.errors,
             })
