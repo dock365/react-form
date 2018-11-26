@@ -53,7 +53,7 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
               name: this.props.name,
               placeholder: this.props.placeholder,
               defaultValue: this.props.defaultValue,
-              value: field && field.value,
+              value: this.props.defaultValue || field && field.value,
               options: this.props.options,
               onChange: (
                 value: number | string | boolean | Date,
