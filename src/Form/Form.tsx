@@ -59,7 +59,7 @@ export interface IFormContext {
     e?: React.MouseEvent<HTMLInputElement>,
   ) => void;
   fields?: IField[];
-  initialize?: (name: string, validationRules?: validationRules) => void;
+  initialize?: (name: string, validationRules?: validationRules, value?: any) => void;
 }
 
 export const FormContext: Context<IFormContext> = createReactContext({});

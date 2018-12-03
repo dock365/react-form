@@ -42,8 +42,9 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
         {({ fields, onChange, onBlur, initialize }) => {
           const field = fields && fields.find((item: any) => item.name === this.props.name);
           if (!field) {
-            if (initialize)
-              initialize(this.props.name, this.props.validationRules, value: this.props.defaultValue );
+            if (initialize) {
+              initialize(this.props.name, this.props.validationRules, this.props.defaultValue);
+            }
 
             return null;
           }
@@ -64,7 +65,7 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
                 e?: React.MouseEvent<HTMLInputElement>,
               ) => onBlur && onBlur(value, this.props.name, e),
               label: this.props.label,
-              errors: field && field.errors,
+              errors: field && field.errors && field.errors[0],
             })
           );
         }}
