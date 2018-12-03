@@ -22,7 +22,7 @@ export interface IFieldProps {
   name: string;
   label?: string;
   placeholder?: string;
-  defaultValue?: string;
+  defaultValue?: string | Date | number | boolean;
   render: (props: IFieldRenderProps | any) => JSX.Element;
   onChange?: (value: string) => void;
   onBlur?: (value: string) => void;
