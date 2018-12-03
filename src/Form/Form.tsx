@@ -108,7 +108,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
     );
   }
 
-  private _initializeField(name: string, _validationRules?: validationRules) {
+  private _initializeField(name: string, _validationRules?: validationRules, value?: any) {
     const fieldValue = this.state.fields.find(item => item.name === name);
     if (name && !fieldValue) {
       this.setState(prevState => ({
@@ -117,7 +117,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
           {
             name,
             validationRules: _validationRules,
-            value: "",
+            value,
             errors: [],
           },
         ],

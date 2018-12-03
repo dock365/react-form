@@ -43,7 +43,7 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
           const field = fields && fields.find((item: any) => item.name === this.props.name);
           if (!field) {
             if (initialize)
-              initialize(this.props.name, this.props.validationRules);
+              initialize(this.props.name, this.props.validationRules, value: this.props.defaultValue );
 
             return null;
           }
