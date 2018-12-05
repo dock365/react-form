@@ -65,7 +65,7 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
                 e?: React.MouseEvent<HTMLInputElement>,
               ) => onBlur && onBlur(value, this.props.name, e),
               label: this.props.label,
-              errors: field && field.errors && field.errors[0],
+              errors: field && field.errors,
             })
           );
         }}
