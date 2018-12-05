@@ -40,6 +40,7 @@ export interface IField {
   value?: any;
   errors?: string[];
   validationRules?: validationRules;
+  updated?: boolean;
 }
 
 export interface IFormState {
@@ -59,7 +60,7 @@ export interface IFormContext {
     e?: React.MouseEvent<HTMLInputElement>,
   ) => void;
   fields?: IField[];
-  initialize?: (name: string, validationRules?: validationRules, value?: any) => void;
+  initialize?: (name: string, validationRules?: validationRules, value?: any, update?: boolean) => void;
 }
 
 export const FormContext: Context<IFormContext> = createReactContext({});
@@ -111,17 +112,22 @@ export class Form extends React.Component<IFormProps, IFormState> {
   private _initializeField(name: string, _validationRules?: validationRules, value?: any) {
     const fieldValue = this.state.fields.find(item => item.name === name);
     if (name && !fieldValue) {
-      this.setState(prevState => ({
-        fields: [
-          ...prevState.fields,
+      this.setState(
+        prevState => (
           {
-            name,
-            validationRules: _validationRules,
-            value,
-            errors: [],
-          },
-        ],
-      }));
+            fields: [
+              ...prevState.fields,
+              {
+                name,
+                validationRules: _validationRules,
+                value,
+                errors: [],
+                updated: false,
+              },
+            ],
+          }
+        )
+      );
     }
   }
 
@@ -130,6 +136,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
     name: string,
     e?: React.MouseEvent<HTMLInputElement>,
   ) {
+    debugger;
     const fieldValue = this.state.fields.find(item => item.name === name);
     if (fieldValue) {
       fieldValue.value = value;

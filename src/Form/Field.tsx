@@ -48,6 +48,9 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
 
             return null;
           }
+          if (field && field.value === undefined && this.props.defaultValue !== undefined && onChange) {
+            onChange(this.props.defaultValue, this.props.name);
+          }
 
           return (
             React.createElement(this.props.render, {
