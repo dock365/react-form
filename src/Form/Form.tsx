@@ -120,7 +120,6 @@ export class Form extends React.Component<IFormProps, IFormState> {
               {
                 name,
                 validationRules: _validationRules,
-                value,
                 errors: [],
                 updated: false,
               },
@@ -136,7 +135,6 @@ export class Form extends React.Component<IFormProps, IFormState> {
     name: string,
     e?: React.MouseEvent<HTMLInputElement>,
   ) {
-    debugger;
     const fieldValue = this.state.fields.find(item => item.name === name);
     if (fieldValue) {
       fieldValue.value = value;
