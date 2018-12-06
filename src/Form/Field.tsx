@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { FormContext, validationRules } from './Form';
+import { validationTypes } from '@dock365/validator';
 
 export interface IFieldRenderProps {
   name: string;
@@ -51,6 +52,7 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
           if (field && field.value === undefined && this.props.defaultValue !== undefined && onChange) {
             onChange(this.props.defaultValue, this.props.name);
           }
+          const type = this.props.validationRules && this.props.validationRules.type;
 
           return (
             React.createElement(this.props.render, {
@@ -62,11 +64,23 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
               onChange: (
                 value: number | string | boolean | Date,
                 e?: React.MouseEvent<HTMLInputElement>,
-              ) => onChange && onChange(value, this.props.name, e),
+              ) => onChange && onChange(
+                type === validationTypes.String && typeof value === "number" ?
+                  `${value}` :
+                  value,
+                this.props.name,
+                e,
+              ),
               onBlur: (
                 value: number | string | boolean | Date,
                 e?: React.MouseEvent<HTMLInputElement>,
-              ) => onBlur && onBlur(value, this.props.name, e),
+              ) => onBlur && onBlur(
+                type === validationTypes.String && typeof value === "number" ?
+                  `${value}` :
+                  value,
+                this.props.name,
+                e,
+              ),
               label: this.props.label,
               errors: field && field.errors,
             })
