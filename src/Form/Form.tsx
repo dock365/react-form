@@ -37,6 +37,7 @@ export type validationRules =
 
 export interface IField {
   name: string;
+  label?: string;
   value?: any;
   errors?: string[];
   validationRules?: validationRules;
@@ -60,7 +61,7 @@ export interface IFormContext {
     e?: React.MouseEvent<HTMLInputElement>,
   ) => void;
   fields?: IField[];
-  initialize?: (name: string, validationRules?: validationRules, value?: any, update?: boolean) => void;
+  initialize?: (name: string, label?: string, validationRules?: validationRules, value?: any, update?: boolean) => void;
 }
 
 export const FormContext: Context<IFormContext> = createReactContext({});
@@ -109,7 +110,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
     );
   }
 
-  private _initializeField(name: string, _validationRules?: validationRules, value?: any) {
+  private _initializeField(name: string, label?: string, _validationRules?: validationRules, value?: any) {
     const fieldValue = this.state.fields.find(item => item.name === name);
     if (name && !fieldValue) {
       this.setState(
@@ -119,13 +120,14 @@ export class Form extends React.Component<IFormProps, IFormState> {
               ...prevState.fields,
               {
                 name,
+                label,
                 validationRules: _validationRules,
                 errors: [],
                 updated: false,
               },
             ],
           }
-        )
+        ),
       );
     }
   }
@@ -210,16 +212,20 @@ export class Form extends React.Component<IFormProps, IFormState> {
       let result: IValidationResponse;
       switch (field.validationRules.type) {
         case validationTypes.String:
-          result = this.validator[validationTypes.String](field.name, field.value || "", field.validationRules);
+          result =
+            this.validator[validationTypes.String](field.label || field.name, field.value || "", field.validationRules);
           break;
         case validationTypes.Number:
-          result = this.validator[validationTypes.Number](field.name, field.value || 0, field.validationRules);
+          result =
+            this.validator[validationTypes.Number](field.label || field.name, field.value || 0, field.validationRules);
           break;
         case validationTypes.Date:
-          result = this.validator[validationTypes.Date](field.name, field.value, field.validationRules);
+          result =
+            this.validator[validationTypes.Date](field.label || field.name, field.value, field.validationRules);
           break;
         case validationTypes.Email:
-          result = this.validator[validationTypes.Email](field.name, field.value || "", field.validationRules);
+          result =
+            this.validator[validationTypes.Email](field.label || field.name, field.value || "", field.validationRules);
           break;
 
         default:
