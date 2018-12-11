@@ -25,8 +25,8 @@ export interface IFieldProps {
   placeholder?: string;
   defaultValue?: string | Date | number | boolean;
   render: (props: IFieldRenderProps | any) => JSX.Element;
-  onChange?: (value: string) => void;
-  onBlur?: (value: string) => void;
+  onChange?: (value: string | number | Date | boolean) => void;
+  onBlur?: (value: string | number | Date | boolean) => void;
   validationRules?: validationRules;
   options?: object[];
 }
@@ -64,23 +64,33 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
               onChange: (
                 value: number | string | boolean | Date,
                 e?: React.MouseEvent<HTMLInputElement>,
-              ) => onChange && onChange(
-                type === validationTypes.String && typeof value === "number" ?
-                  `${value}` :
-                  value,
-                this.props.name,
-                e,
-              ),
+              ) => {
+                const _value = type === validationTypes.String && typeof value === "number" ?
+                  `${value}` : value;
+                if (onChange)
+                  onChange(
+                    _value,
+                    this.props.name,
+                    e,
+                  );
+                if (this.props.onChange)
+                  this.props.onChange(_value);
+              },
               onBlur: (
                 value: number | string | boolean | Date,
                 e?: React.MouseEvent<HTMLInputElement>,
-              ) => onBlur && onBlur(
-                type === validationTypes.String && typeof value === "number" ?
-                  `${value}` :
-                  value,
-                this.props.name,
-                e,
-              ),
+              ) => {
+                const _value = type === validationTypes.String && typeof value === "number" ?
+                  `${value}` : value;
+                if (onBlur)
+                  onBlur(
+                    _value,
+                    this.props.name,
+                    e,
+                  );
+                if (this.props.onBlur)
+                  this.props.onBlur(_value);
+              },
               label: this.props.label,
               errors: field && field.errors,
             })
