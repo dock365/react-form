@@ -67,14 +67,8 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
               ) => {
                 const _value = type === validationTypes.String && typeof value === "number" ?
                   `${value}` : value;
-                if (onChange)
-                  onChange(
-                    _value,
-                    this.props.name,
-                    e,
-                  );
-                if (this.props.onChange)
-                  this.props.onChange(_value);
+                if (onChange) onChange(_value, this.props.name, e);
+                if (this.props.onChange) this.props.onChange(_value);
               },
               onBlur: (
                 value: number | string | boolean | Date,
@@ -82,14 +76,8 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
               ) => {
                 const _value = type === validationTypes.String && typeof value === "number" ?
                   `${value}` : value;
-                if (onBlur)
-                  onBlur(
-                    _value,
-                    this.props.name,
-                    e,
-                  );
-                if (this.props.onBlur)
-                  this.props.onBlur(_value);
+                if (onBlur) onBlur(_value, this.props.name, e);
+                if (this.props.onBlur) this.props.onBlur(_value);
               },
               label: this.props.label,
               errors: field && field.errors,
