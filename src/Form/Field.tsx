@@ -28,7 +28,7 @@ export interface IFieldProps {
   onChange?: (value: string | number | Date | boolean) => void;
   onBlur?: (value: string | number | Date | boolean) => void;
   validationRules?: validationRules;
-  customProps: any;
+  customProps?: any;
 }
 export interface IFieldState { }
 
