@@ -7,7 +7,7 @@ export interface IFieldRenderProps {
   placeholder?: string;
   defaultValue?: string | number | boolean;
   value?: string | number | boolean;
-  fieldProps?: any;
+  customProps?: any;
   onChange?: (
     value: number | string | boolean | Date,
     e?: React.MouseEvent<HTMLInputElement>,
@@ -28,7 +28,7 @@ export interface IFieldProps {
   onChange?: (value: string | number | Date | boolean) => void;
   onBlur?: (value: string | number | Date | boolean) => void;
   validationRules?: validationRules;
-  fieldProps: any;
+  customProps: any;
 }
 export interface IFieldState { }
 
@@ -60,7 +60,7 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
               placeholder: this.props.placeholder,
               defaultValue: this.props.defaultValue,
               value: field && field.value,
-              fieldProps: this.props.fieldProps,
+              customProps: this.props.customProps,
               onChange: (
                 value: number | string | boolean | Date,
                 e?: React.MouseEvent<HTMLInputElement>,
