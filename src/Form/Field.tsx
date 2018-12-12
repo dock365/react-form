@@ -24,7 +24,7 @@ export interface IFieldProps {
   label?: string;
   placeholder?: string;
   defaultValue?: string | Date | number | boolean;
-  render: (props: IFieldRenderProps | any) => JSX.Element;
+  render: React.ComponentType<IFieldRenderProps>;
   onChange?: (value: string | number | Date | boolean) => void;
   onBlur?: (value: string | number | Date | boolean) => void;
   validationRules?: validationRules;
