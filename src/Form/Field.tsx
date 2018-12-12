@@ -7,7 +7,7 @@ export interface IFieldRenderProps {
   placeholder?: string;
   defaultValue?: string | number | boolean;
   value?: string | number | boolean;
-  options?: object[];
+  fieldProps?: any;
   onChange?: (
     value: number | string | boolean | Date,
     e?: React.MouseEvent<HTMLInputElement>,
@@ -28,7 +28,7 @@ export interface IFieldProps {
   onChange?: (value: string | number | Date | boolean) => void;
   onBlur?: (value: string | number | Date | boolean) => void;
   validationRules?: validationRules;
-  options?: object[];
+  fieldProps: any;
 }
 export interface IFieldState { }
 
@@ -40,7 +40,7 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
   public render() {
     return (
       <FormContext.Consumer >
-        {({ fields, onChange, onBlur, initialize }) => {
+        {({ fields, onChange, onBlur, initialize, showAsteriskOnRequired }) => {
           const field = fields && fields.find((item: any) => item.name === this.props.name);
           if (!field) {
             if (initialize) {
@@ -60,7 +60,7 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
               placeholder: this.props.placeholder,
               defaultValue: this.props.defaultValue,
               value: field && field.value,
-              options: this.props.options,
+              fieldProps: this.props.fieldProps,
               onChange: (
                 value: number | string | boolean | Date,
                 e?: React.MouseEvent<HTMLInputElement>,
@@ -79,7 +79,9 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
                 if (onBlur) onBlur(_value, this.props.name, e);
                 if (this.props.onBlur) this.props.onBlur(_value);
               },
-              label: this.props.label,
+              label: showAsteriskOnRequired && field.validationRules && field.validationRules.required ?
+                `${this.props.label}*` :
+                this.props.label,
               errors: field && field.errors,
             })
           );

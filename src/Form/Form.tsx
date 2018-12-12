@@ -23,6 +23,7 @@ export interface IFormProps {
   onChange?: (e: FormEvent<HTMLFormElement>, values: ISubmitValues) => void;
   validationMessages?: IValidationFailMessages;
   validateOn?: ValidateOnTypes;
+  showAsteriskOnRequired?: boolean;
 }
 
 export interface ISubmitValues {
@@ -62,6 +63,7 @@ export interface IFormContext {
   ) => void;
   fields?: IField[];
   initialize?: (name: string, label?: string, validationRules?: validationRules, value?: any, update?: boolean) => void;
+  showAsteriskOnRequired?: boolean;
 }
 
 export const FormContext: Context<IFormContext> = createReactContext({});
@@ -97,6 +99,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
         onBlur: this._onFieldBlur,
         fields: this.state.fields,
         initialize: this._initializeField,
+        showAsteriskOnRequired: this.props.showAsteriskOnRequired,
       }}>
         <form
           onSubmit={this._onSubmit}
