@@ -5,7 +5,7 @@ import { validationTypes } from '@dock365/validator';
 export interface IFieldRenderProps {
   name: string;
   placeholder?: string;
-  defaultValue?: string | number | boolean;
+  defaultValue?: string | Date | number | boolean;
   value?: string | number | boolean;
   customProps?: any;
   onChange?: (
