@@ -80,7 +80,7 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
                 if (onBlur) onBlur(_value, this.props.name, e);
                 if (this.props.onBlur) this.props.onBlur(_value);
               },
-              label: showAsteriskOnRequired && field.validationRules && field.validationRules.required ?
+              label: showAsteriskOnRequired && this.props.validationRules && this.props.validationRules.required ?
                 `${this.props.label}*` :
                 this.props.label,
               validationRules: this.props.validationRules,
