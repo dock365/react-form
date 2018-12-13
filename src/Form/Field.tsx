@@ -17,6 +17,7 @@ export interface IFieldRenderProps {
     e?: React.MouseEvent<HTMLInputElement>,
   ) => void;
   label?: string;
+  validationRules?: validationRules;
   errors?: string[];
 }
 export interface IFieldProps {
@@ -82,6 +83,7 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
               label: showAsteriskOnRequired && field.validationRules && field.validationRules.required ?
                 `${this.props.label}*` :
                 this.props.label,
+              validationRules: this.props.validationRules,
               errors: field && field.errors,
             })
           );
