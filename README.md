@@ -74,7 +74,7 @@
 |customProps|any|false|Custom Props that can be accessed from render props|
 
 ### Field Render Props
-*All props from Field Props excluding render and*
+*All props from Field Props excluding render and including*
 | Name               | Type   |Description                                                          |
 | :----------------- | :----- | :------------------------------------------------------------------- |
 |errors|`string[]`|Validation massages if any validation rule fails
