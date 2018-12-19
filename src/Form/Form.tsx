@@ -17,7 +17,6 @@ export enum ValidateOnTypes {
 }
 
 export interface IFormProps {
-  submitElement?: JSX.Element;
   onSubmit?: (e: FormEvent<HTMLFormElement>, values: ISubmitValues) => void;
   onBlur?: (e: FormEvent<HTMLFormElement>, values: ISubmitValues) => void;
   onChange?: (e: FormEvent<HTMLFormElement>, values: ISubmitValues) => void;

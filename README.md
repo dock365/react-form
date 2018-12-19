@@ -49,6 +49,35 @@
   };
 ```
 
+## Properties
+### Form Props
+| Name               | Type   | Required           |Description                                                          |
+| :----------------- | :----- | :----------------- | :------------------------------------------------------------------- |
+|onSubmit|`(e: event, values: { key: value })`| false |Return complete values in the field on form submit |
+|onBlur|`(e: event, values: { key: value })`| false |Return complete values in the field on form field blur |
+|onChange|`(e: event, values: { key: value })`| false |Return complete values in the field on form field blur |
+|validateOn|`ValidateOnTypes` or `0` - Submit, or `1` - FieldChange, or `2` - FieldBlur,| | |
+|validationMessages|`IValidationFailMessages` or `{[criterion: string]: message}`|false|custom validation messages|
+|showAsteriskOnRequired|`boolean`|false | Show asterisk (`*`) on required field labels |
+
+### Field Props
+| Name               | Type   | Required           |Description                                                          |
+| :----------------- | :----- | :----------------- | :------------------------------------------------------------------- |
+|name|`string`|true|A unique name to identify the field and value|
+|label|`string`|false|Label to show on field|
+|placeholder|`string`|false|Placeholder value|
+|defaultValue|any based on field type|false|Default value|
+|render| `(props: IFieldRenderProps) => JSX.Element`|false|Field element
+|onChange|`(value: any based on field) => void;`|false|On field change action|
+|onBlur|`(value: any based on field) => void;`|false|On field blur action|
+|validationRules|`validationRules`|false|validation rules based on [@dock365/validator](https://www.npmjs.com/package/@dock365/validator)|
+|customProps|any|false|Custom Props that can be accessed from render props|
+
+### Field Render Props
+*All props from Field Props excluding render and*
+| Name               | Type   |Description                                                          |
+| :----------------- | :----- | :------------------------------------------------------------------- |
+|errors|`string[]`|Validation massages if any validation rule fails
 ## Contributing!
 All contributions are super welcome!
 
