@@ -1,30 +1,30 @@
 # React Form
-<!-- [![Build Status](https://travis-ci.org/dock365/react-form.svg?branch=master)](https://travis-ci.org/dock365/react-form) -->
-[![npm Version](https://img.shields.io/npm/v/@dock365/react-form.svg)](https://www.npmjs.com/package/@dock365/react-form)
+<!-- [![Build Status](https://travis-ci.org/dock365/reform.svg?branch=master)](https://travis-ci.org/dock365/reform) -->
+[![npm Version](https://img.shields.io/npm/v/@dock365/reform.svg)](https://www.npmjs.com/package/@dock365/reform)
 
 
 ## Install
 1 Install react form as dependency
   ```bash
   # Using yarn package manager
-  $ yarn add @dock365/react-form
+  $ yarn add @dock365/reform
 
   # Using npm package manager
-  $ npm install --save @dock365/react-form
+  $ npm install --save @dock365/reform
   ```
 2 Import React form module
   ```javascript
   // ES6
-  import { Form } from "@dock365/react-form"
+  import { Form } from "@dock365/reform"
 
   // ES5
-  var Form = require("@dock365/react-form").Form;
+  var Form = require("@dock365/reform").Form;
   ```
 ## Example
 
 ```javascript
   import React from "react";
-  import { Form, Field } from "@dock365/react-form";
+  import { Form, Field } from "@dock365/reform";
 
   export default (props) => {
     return (
