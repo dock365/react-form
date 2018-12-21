@@ -31,11 +31,22 @@ export interface IFieldProps {
   validationRules?: validationRules;
   customProps?: any;
 }
-export interface IFieldState { }
+export interface IFieldState {
+  shouldUpdate: boolean;
+}
 
 export class Field extends React.Component<IFieldProps, IFieldState> {
   constructor(props: IFieldProps) {
     super(props);
+
+    this.state = {
+      shouldUpdate: false,
+    };
+  }
+  public componentDidUpdate(prevProps: IFieldProps) {
+    if (this.props.validationRules !== prevProps.validationRules) {
+      this.setState({ shouldUpdate: true });
+    }
   }
 
   public render() {
@@ -43,9 +54,11 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
       <FormContext.Consumer >
         {({ fields, onChange, onBlur, initialize, showAsteriskOnRequired }) => {
           const field = fields && fields.find((item: any) => item.name === this.props.name);
-          if (!field) {
+          if (!field || this.state.shouldUpdate) {
+            if (this.state.shouldUpdate)
+              this.setState((prevState) => ({ shouldUpdate: !prevState.shouldUpdate }));
             if (initialize) {
-              initialize(this.props.name, this.props.label, this.props.validationRules, this.props.defaultValue);
+              initialize(this.props.name, this.props.label, this.props.validationRules);
             }
 
             return null;
@@ -53,6 +66,7 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
           if (field && field.value === undefined && this.props.defaultValue !== undefined && onChange) {
             onChange(this.props.defaultValue, this.props.name);
           }
+
           const type = this.props.validationRules && this.props.validationRules.type;
 
           return (
@@ -87,7 +101,8 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
               errors: field && field.errors,
             })
           );
-        }}
+        }
+        }
       </FormContext.Consumer>
     );
   }
