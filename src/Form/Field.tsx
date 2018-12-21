@@ -81,7 +81,7 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
                 if (this.props.onBlur) this.props.onBlur(_value);
               },
               label: showAsteriskOnRequired && this.props.validationRules && this.props.validationRules.required ?
-                `${this.props.label}*` :
+                `${this.props.label}${<span style={{ color: "#e41010" }}>*</span>}` :
                 this.props.label,
               validationRules: this.props.validationRules,
               errors: field && field.errors,
