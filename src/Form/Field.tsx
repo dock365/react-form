@@ -45,6 +45,7 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
   }
   public componentDidUpdate(prevProps: IFieldProps) {
     if (this.props.validationRules !== prevProps.validationRules) {
+      debugger;
       this.setState({ shouldUpdate: true });
     }
   }

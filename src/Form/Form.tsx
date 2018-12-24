@@ -113,8 +113,12 @@ export class Form extends React.Component<IFormProps, IFormState> {
   }
 
   private _initializeField(name: string, label?: string, _validationRules?: validationRules, value?: any) {
+    if (!name) {
+      return;
+    }
+
     const fieldValue = this.state.fields.find(item => item.name === name);
-    if (name && !fieldValue) {
+    if (!fieldValue) {
       this.setState(
         prevState => (
           {
@@ -128,6 +132,15 @@ export class Form extends React.Component<IFormProps, IFormState> {
                 updated: false,
               },
             ],
+          }
+        ),
+      );
+    } else {
+      this.setState(
+        prevState => (
+          {
+            fields: prevState.fields
+              .map(field => field.name === name ? { ...field, label, validationRules: _validationRules } : field),
           }
         ),
       );
@@ -201,10 +214,6 @@ export class Form extends React.Component<IFormProps, IFormState> {
 
   private _validateAll(cb: () => void) {
     const success = this.state.fields.reduce((prevValue, field) => this._validateField(field) && prevValue, true);
-    // let success = true;
-    // this.state.fields.forEach((field) => {
-    //   success = success && this._validateField(field);
-    // });
     if (success)
       cb();
   }
@@ -222,6 +231,8 @@ export class Form extends React.Component<IFormProps, IFormState> {
             this.validator[validationTypes.Number](field.label || field.name, field.value || 0, field.validationRules);
           break;
         case validationTypes.Date:
+          debugger;
+          console.log(field)
           result =
             this.validator[validationTypes.Date](field.label || field.name, field.value, field.validationRules);
           break;
