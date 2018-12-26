@@ -5,15 +5,15 @@ import { validationTypes } from '@dock365/validator';
 export interface IFieldRenderProps {
   name: string;
   placeholder?: string;
-  defaultValue?: string | Date | number | boolean;
-  value?: string | number | boolean;
+  defaultValue?: any;
+  value?: any;
   customProps?: any;
   onChange?: (
-    value: number | string | boolean | Date,
+    value: any,
     e?: React.MouseEvent<HTMLInputElement>,
   ) => void;
   onBlur?: (
-    value: number | string | boolean | Date,
+    value: any,
     e?: React.MouseEvent<HTMLInputElement>,
   ) => void;
   label?: string;
@@ -24,10 +24,10 @@ export interface IFieldProps {
   name: string;
   label?: string;
   placeholder?: string;
-  defaultValue?: string | Date | number | boolean;
+  defaultValue?: any;
   render: React.ComponentType<IFieldRenderProps>;
-  onChange?: (value: string | number | Date | boolean) => void;
-  onBlur?: (value: string | number | Date | boolean) => void;
+  onChange?: (value: any) => void;
+  onBlur?: (value: any) => void;
   validationRules?: validationRules;
   customProps?: any;
 }
@@ -45,7 +45,6 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
   }
   public componentDidUpdate(prevProps: IFieldProps) {
     if (this.props.validationRules !== prevProps.validationRules) {
-      debugger;
       this.setState({ shouldUpdate: true });
     }
   }
@@ -78,7 +77,7 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
               value: field && field.value,
               customProps: this.props.customProps,
               onChange: (
-                value: number | string | boolean | Date,
+                value: any,
                 e?: React.MouseEvent<HTMLInputElement>,
               ) => {
                 const _value = type === validationTypes.String && typeof value === "number" ?
@@ -87,7 +86,7 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
                 if (this.props.onChange) this.props.onChange(_value);
               },
               onBlur: (
-                value: number | string | boolean | Date,
+                value: any,
                 e?: React.MouseEvent<HTMLInputElement>,
               ) => {
                 const _value = type === validationTypes.String && typeof value === "number" ?

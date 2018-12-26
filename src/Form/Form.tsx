@@ -51,17 +51,23 @@ export interface IFormState {
 
 export interface IFormContext {
   onChange?: (
-    value: string | number | boolean | Date,
+    value: any,
     name: string,
     e?: React.MouseEvent<HTMLInputElement>,
   ) => void;
   onBlur?: (
-    value: string | number | boolean | Date,
+    value: any,
     name: string,
     e?: React.MouseEvent<HTMLInputElement>,
   ) => void;
   fields?: IField[];
-  initialize?: (name: string, label?: string, validationRules?: validationRules, value?: any, update?: boolean) => void;
+  initialize?: (
+    name: string,
+    label?: string,
+    validationRules?: validationRules,
+    value?: any,
+    update?: boolean,
+  ) => void;
   showAsteriskOnRequired?: boolean;
 }
 
@@ -148,7 +154,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
   }
 
   private _onFieldChange(
-    value: string | number | boolean | Date,
+    value: any,
     name: string,
     e?: React.MouseEvent<HTMLInputElement>,
   ) {
@@ -167,7 +173,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
   }
 
   private _onFieldBlur(
-    value: string | number | boolean | Date,
+    value: any,
     name: string,
     e?: React.MouseEvent<HTMLInputElement>,
   ) {
@@ -231,8 +237,6 @@ export class Form extends React.Component<IFormProps, IFormState> {
             this.validator[validationTypes.Number](field.label || field.name, field.value || 0, field.validationRules);
           break;
         case validationTypes.Date:
-          debugger;
-          console.log(field)
           result =
             this.validator[validationTypes.Date](field.label || field.name, field.value, field.validationRules);
           break;
