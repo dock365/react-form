@@ -17,15 +17,27 @@ export enum ValidateOnTypes {
 }
 
 export interface IFormProps {
-  onSubmit?: (e: FormEvent<HTMLFormElement>, values: ISubmitValues) => void;
-  onBlur?: (e: FormEvent<HTMLFormElement>, values: ISubmitValues) => void;
-  onChange?: (e: FormEvent<HTMLFormElement>, values: ISubmitValues) => void;
+  onSubmit?: (
+    e: FormEvent<HTMLFormElement>,
+    values: IFieldValues,
+    resetFields?: (name?: string | string[]) => void,
+  ) => void;
+  onBlur?: (
+    e: FormEvent<HTMLFormElement>,
+    values: IFieldValues,
+    resetFields?: (name?: string | string[]) => void,
+  ) => void;
+  onChange?: (
+    e: FormEvent<HTMLFormElement>,
+    values: IFieldValues,
+    resetFields?: (name?: string | string[]) => void,
+  ) => void;
   validationMessages?: IValidationFailMessages;
   validateOn?: ValidateOnTypes;
   showAsteriskOnRequired?: boolean;
 }
 
-export interface ISubmitValues {
+export interface IFieldValues {
   [name: string]: string | number | boolean;
 }
 
@@ -69,6 +81,7 @@ export interface IFormContext {
     update?: boolean,
   ) => void;
   showAsteriskOnRequired?: boolean;
+  resetFields?: (name?: string | string[]) => void;
 }
 
 export const FormContext: Context<IFormContext> = createReactContext({});
@@ -95,6 +108,8 @@ export class Form extends React.Component<IFormProps, IFormState> {
     this._onSubmit = this._onSubmit.bind(this);
     this._onFormChange = this._onFormChange.bind(this);
     this._onFormBlur = this._onFormBlur.bind(this);
+
+    this._resetFields = this._resetFields.bind(this);
   }
 
   public render() {
@@ -105,6 +120,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
         fields: this.state.fields,
         initialize: this._initializeField,
         showAsteriskOnRequired: this.props.showAsteriskOnRequired,
+        resetFields: this._resetFields,
       }}>
         <form
           onSubmit={this._onSubmit}
@@ -188,13 +204,13 @@ export class Form extends React.Component<IFormProps, IFormState> {
 
   private _onFormChange(e: FormEvent<HTMLFormElement>) {
     if (this.props.onChange) {
-      // this.props.onChange(e, this.state.fieldValues);
+      this.props.onChange(e, this._structuredValues(), this._resetFields);
     }
   }
 
   private _onFormBlur(e: FormEvent<HTMLFormElement>) {
     if (this.props.onBlur) {
-      // this.props.onBlur(e, this.state.fieldValues);
+      this.props.onBlur(e, this._structuredValues(), this._resetFields);
     }
   }
 
@@ -203,16 +219,16 @@ export class Form extends React.Component<IFormProps, IFormState> {
     if (this.props.validateOn === ValidateOnTypes.Submit) {
       this._validateAll(() => {
         if (this.props.onSubmit)
-          this.props.onSubmit(e, this._structuredValues());
+          this.props.onSubmit(e, this._structuredValues(), this._resetFields);
       });
     } else {
       if (!this.state.hasError && this.props.onSubmit)
-        this.props.onSubmit(e, this._structuredValues());
+        this.props.onSubmit(e, this._structuredValues(), this._resetFields);
     }
   }
 
-  private _structuredValues(): ISubmitValues {
-    const values: ISubmitValues = {};
+  private _structuredValues(): IFieldValues {
+    const values: IFieldValues = {};
     this.state.fields.forEach(field => values[field.name] = field.value);
 
     return values;
@@ -273,5 +289,26 @@ export class Form extends React.Component<IFormProps, IFormState> {
     }
 
     return true;
+  }
+
+  private _resetFields(name?: string | string[]) {
+    if (name) {
+      if (typeof name === "string") {
+        this.setState(prevState => ({
+          fields: prevState.fields.map(field => field.name === name ? { ...field, value: undefined } : field),
+        }));
+      } else {
+        this.setState(prevState => {
+          let fields: IField[] = prevState.fields;
+          name.forEach(_name => {
+            fields = fields.map(field => field.name === _name ? { ...field, value: undefined } : field);
+          });
+        });
+      }
+    } else {
+      this.setState({
+        fields: [],
+      });
+    }
   }
 }

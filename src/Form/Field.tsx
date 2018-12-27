@@ -26,8 +26,8 @@ export interface IFieldProps {
   placeholder?: string;
   defaultValue?: any;
   render: React.ComponentType<IFieldRenderProps>;
-  onChange?: (value: any) => void;
-  onBlur?: (value: any) => void;
+  onChange?: (value: any, resetFields?: (name?: string | string[]) => void) => void;
+  onBlur?: (value: any, resetFields?: (name?: string | string[]) => void) => void;
   validationRules?: validationRules;
   customProps?: any;
 }
@@ -52,7 +52,7 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
   public render() {
     return (
       <FormContext.Consumer >
-        {({ fields, onChange, onBlur, initialize, showAsteriskOnRequired }) => {
+        {({ fields, onChange, onBlur, initialize, showAsteriskOnRequired, resetFields }) => {
           const field = fields && fields.find((item: any) => item.name === this.props.name);
           if (!field || this.state.shouldUpdate) {
             if (this.state.shouldUpdate)
@@ -83,7 +83,7 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
                 const _value = type === validationTypes.String && typeof value === "number" ?
                   `${value}` : value;
                 if (onChange) onChange(_value, this.props.name, e);
-                if (this.props.onChange) this.props.onChange(_value);
+                if (this.props.onChange) this.props.onChange(_value, resetFields);
               },
               onBlur: (
                 value: any,
@@ -92,7 +92,7 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
                 const _value = type === validationTypes.String && typeof value === "number" ?
                   `${value}` : value;
                 if (onBlur) onBlur(_value, this.props.name, e);
-                if (this.props.onBlur) this.props.onBlur(_value);
+                if (this.props.onBlur) this.props.onBlur(_value, resetFields);
               },
               label: showAsteriskOnRequired && this.props.validationRules && this.props.validationRules.required ?
                 `${this.props.label}*` :
@@ -101,8 +101,7 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
               errors: field && field.errors,
             })
           );
-        }
-        }
+        }}
       </FormContext.Consumer>
     );
   }
