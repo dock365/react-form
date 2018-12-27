@@ -295,13 +295,13 @@ export class Form extends React.Component<IFormProps, IFormState> {
     if (name) {
       if (typeof name === "string") {
         this.setState(prevState => ({
-          fields: prevState.fields.map(field => field.name === name ? { ...field, value: undefined } : field),
+          fields: prevState.fields.map(field => field.name === name ? { ...field, value: null } : field),
         }));
       } else {
         this.setState(prevState => {
           let fields: IField[] = prevState.fields;
           name.forEach(_name => {
-            fields = fields.map(field => field.name === _name ? { ...field, value: undefined } : field);
+            fields = fields.map(field => field.name === _name ? { ...field, value: null } : field);
           });
         });
       }
