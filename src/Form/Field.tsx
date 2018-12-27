@@ -19,6 +19,7 @@ export interface IFieldRenderProps {
   label?: string;
   validationRules?: validationRules;
   errors?: string[];
+  resetFields?: (name?: string | string[]) => void;
 }
 export interface IFieldProps {
   name: string;
@@ -76,6 +77,7 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
               defaultValue: this.props.defaultValue,
               value: field && field.value,
               customProps: this.props.customProps,
+              resetFields,
               onChange: (
                 value: any,
                 e?: React.MouseEvent<HTMLInputElement>,
