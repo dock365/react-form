@@ -47,7 +47,7 @@
     "typescript": "^3.0.1"
   },
   "dependencies": {
-    "@dock365/validator": "^0.10.2",
+    "@dock365/validator": "^0.10.3",
     "create-react-context": "^0.2.3",
     "prop-types": "^15.6.2"
   }
