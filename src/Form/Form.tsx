@@ -250,7 +250,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
           break;
         case validationTypes.Number:
           result =
-            this.validator[validationTypes.Number](field.label || field.name, field.value || 0, field.validationRules);
+            this.validator[validationTypes.Number](field.label || field.name, field.value, field.validationRules);
           break;
         case validationTypes.Date:
           result =
