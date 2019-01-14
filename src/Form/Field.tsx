@@ -76,6 +76,16 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
           }
           if (field && field.value === undefined && this.props.defaultValue !== undefined && onChange) {
             onChange(this.props.defaultValue, this.props.name);
+            if (
+              validateOn &&
+              this.props.customValidation &&
+              updateCustomValidationMessage
+            ) {
+              updateCustomValidationMessage(
+                this.props.name,
+                this.props.customValidation(this.props.defaultValue, this.props.validationRules),
+              );
+            }
           }
 
           const type = this.props.validationRules && this.props.validationRules.type;
@@ -101,7 +111,10 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
                   this.props.customValidation &&
                   updateCustomValidationMessage
                 ) {
-                  updateCustomValidationMessage(field, this.props.customValidation(_value, this.props.validationRules));
+                  updateCustomValidationMessage(
+                    field.name,
+                    this.props.customValidation(_value, this.props.validationRules),
+                  );
                 }
               },
               onBlur: (
@@ -117,7 +130,10 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
                   this.props.customValidation &&
                   updateCustomValidationMessage
                 ) {
-                  updateCustomValidationMessage(field, this.props.customValidation(_value, this.props.validationRules));
+                  updateCustomValidationMessage(
+                    field.name,
+                    this.props.customValidation(_value, this.props.validationRules),
+                  );
                 }
               },
               label: showAsteriskOnRequired && this.props.validationRules && this.props.validationRules.required ?
