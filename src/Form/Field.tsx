@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FormContext, validationRules } from './Form';
+import { FormContext, validationRules, ValidateOnTypes } from './Form';
 import { validationTypes } from '@dock365/validator';
 
 export interface IFieldRenderProps {
@@ -31,6 +31,7 @@ export interface IFieldProps {
   onBlur?: (value: any, resetFields?: (name?: string | string[]) => void) => void;
   validationRules?: validationRules;
   customProps?: any;
+  customValidation?: (value?: any, validationRules?: validationRules) => string[];
 }
 export interface IFieldState {
   shouldUpdate: boolean;
@@ -53,7 +54,16 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
   public render() {
     return (
       <FormContext.Consumer >
-        {({ fields, onChange, onBlur, initialize, showAsteriskOnRequired, resetFields }) => {
+        {({
+          fields,
+          onChange,
+          onBlur,
+          initialize,
+          showAsteriskOnRequired,
+          resetFields,
+          validateOn,
+          updateCustomValidationMessage,
+        }) => {
           const field = fields && fields.find((item: any) => item.name === this.props.name);
           if (!field || this.state.shouldUpdate) {
             if (this.state.shouldUpdate)
@@ -86,6 +96,13 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
                   `${value}` : value;
                 if (onChange) onChange(_value, this.props.name, e);
                 if (this.props.onChange) this.props.onChange(_value, resetFields);
+                if (
+                  validateOn === ValidateOnTypes.FieldChange &&
+                  this.props.customValidation &&
+                  updateCustomValidationMessage
+                ) {
+                  updateCustomValidationMessage(field, this.props.customValidation(_value, this.props.validationRules));
+                }
               },
               onBlur: (
                 value: any,
@@ -95,12 +112,19 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
                   `${value}` : value;
                 if (onBlur) onBlur(_value, this.props.name, e);
                 if (this.props.onBlur) this.props.onBlur(_value, resetFields);
+                if (
+                  validateOn === ValidateOnTypes.FieldBlur &&
+                  this.props.customValidation &&
+                  updateCustomValidationMessage
+                ) {
+                  updateCustomValidationMessage(field, this.props.customValidation(_value, this.props.validationRules));
+                }
               },
               label: showAsteriskOnRequired && this.props.validationRules && this.props.validationRules.required ?
                 `${this.props.label}*` :
                 this.props.label,
               validationRules: this.props.validationRules,
-              errors: field && field.errors,
+              errors: field && [...field.errors, ...field.customErrors],
             })
           );
         }}

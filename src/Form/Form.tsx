@@ -51,7 +51,8 @@ export interface IField {
   name: string;
   label?: string;
   value?: any;
-  errors?: string[];
+  errors: string[];
+  customErrors: string[];
   validationRules?: validationRules;
   updated?: boolean;
 }
@@ -82,6 +83,8 @@ export interface IFormContext {
   ) => void;
   showAsteriskOnRequired?: boolean;
   resetFields?: (name?: string | string[]) => void;
+  validateOn?: ValidateOnTypes;
+  updateCustomValidationMessage?: (field: IField, messages?: string[]) => void;
 }
 
 export const FormContext: Context<IFormContext> = createReactContext({});
@@ -110,6 +113,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
     this._onFormBlur = this._onFormBlur.bind(this);
 
     this._resetFields = this._resetFields.bind(this);
+    this._updateCustomValidationMessage = this._updateCustomValidationMessage.bind(this);
   }
 
   public render() {
@@ -121,6 +125,8 @@ export class Form extends React.Component<IFormProps, IFormState> {
         initialize: this._initializeField,
         showAsteriskOnRequired: this.props.showAsteriskOnRequired,
         resetFields: this._resetFields,
+        validateOn: this.props.validateOn,
+        updateCustomValidationMessage: this._updateCustomValidationMessage,
       }}>
         <form
           onSubmit={this._onSubmit}
@@ -151,6 +157,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
                 label,
                 validationRules: _validationRules,
                 errors: [],
+                customErrors: [],
                 updated: false,
               },
             ],
@@ -289,6 +296,13 @@ export class Form extends React.Component<IFormProps, IFormState> {
     }
 
     return true;
+  }
+
+  private _updateCustomValidationMessage(field: IField, messages?: string[]) {
+    this.setState(prevState => ({
+      fields: prevState.fields
+        .map(item => item.name === field.name ? { ...item, customErrors: messages || [] } : item),
+    }));
   }
 
   private _resetFields(name?: string | string[]) {
