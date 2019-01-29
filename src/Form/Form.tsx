@@ -242,7 +242,8 @@ export class Form extends React.Component<IFormProps, IFormState> {
   }
 
   private _validateAll(cb?: () => void) {
-    const success = this.state.fields.reduce((prevValue, field) => this._validateField(field) && prevValue, true);
+    const success = this.state.fields
+      .reduce((prevValue, field) => this._validateField(field) && prevValue && field.customErrors.length === 0, true);
     if (success && cb)
       cb();
   }
