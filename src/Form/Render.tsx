@@ -10,6 +10,14 @@ export interface IState {
 
 export default class Render extends React.Component<propsType, IState> {
 
+  constructor(props: propsType) {
+    super(props);
+
+    this.state = {
+      field: undefined,
+    };
+  }
+
   public componentDidMount() {
     if (this.props.fields) {
       this.setState({
