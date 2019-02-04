@@ -61,9 +61,9 @@ export default class Render extends React.Component<propsType, IState> {
     }
   }
 
-  public shouldComponentUpdate(nextProps: propsType, nextState: IState) {
-    return this.state.field !== nextState.field ? true : false;
-  }
+  // public shouldComponentUpdate(nextProps: propsType, nextState: IState) {
+  //   return this.state.field !== nextState.field ? true : false;
+  // }
 
   public render() {
     const { field } = this.state;
