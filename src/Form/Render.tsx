@@ -80,15 +80,6 @@ export default class Render extends React.Component<propsType, IState> {
       validateOn,
       updateCustomValidationMessage,
     } = this.props;
-    // if (!field || this.state.shouldUpdate) {
-    //   if (this.state.shouldUpdate)
-    //     this.setState((prevState) => ({ shouldUpdate: !prevState.shouldUpdate }));
-    //   if (initialize) {
-    //     initialize(this.props.fieldProps.name, this.props.fieldProps.label, this.props.fieldProps.validationRules);
-    //   }
-
-    //   return null;
-    // }
 
     const type = this.props.fieldProps.validationRules && this.props.fieldProps.validationRules.type;
 

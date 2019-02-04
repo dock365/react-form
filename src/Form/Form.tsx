@@ -11,7 +11,7 @@ import Validator, {
 import createReactContext, { Context, ProviderProps } from 'create-react-context';
 
 export enum ValidateOnTypes {
-  Submit,
+  Submit = 1,
   FieldChange,
   FieldBlur,
 }
