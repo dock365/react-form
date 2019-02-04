@@ -98,7 +98,7 @@ export default class Render extends React.Component<propsType, IState> {
         placeholder: this.props.fieldProps.placeholder,
         defaultValue: this.props.fieldProps.defaultValue,
         value: field && field.value,
-        customProps: this.props.fieldProps.customProps.fieldProps,
+        customProps: this.props.fieldProps.customProps,
         resetFields,
         onChange: (
           value: any,
