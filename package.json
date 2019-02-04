@@ -13,6 +13,7 @@
     "minor-release": "npm run build && npm version minor && npm publish --access=public && git push --follow-tags",
     "major-release": "npm run build && npm version major && npm publish --access=public && git push --follow-tags",
     "preminor-release": "npm run build && npm version preminor && npm publish --access=public && git push --follow-tags",
+    "prrelease": "npm run build && npm version prrelease && npm publish --access=public && git push --follow-tags",
     "test": "mocha -r ts-node/register --watch-extensions ts,tsx --watch 'test/**/*.spec.ts' 'src/**/*.ts'"
   },
   "repository": {
