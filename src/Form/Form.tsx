@@ -1,4 +1,4 @@
-import React, { FormEvent } from "react";
+import React, { FormEvent, ReactHTMLElement } from "react";
 import Validator, {
   IValidationFailMessages,
   IStringValidationOptions,
@@ -35,6 +35,7 @@ export interface IFormProps {
   validationMessages?: IValidationFailMessages;
   validateOn?: ValidateOnTypes;
   showAsteriskOnRequired?: boolean;
+  formRef?: (ref: HTMLFormElement | null) => void;
 }
 
 export interface IFieldValues {
@@ -91,7 +92,6 @@ export const FormContext: Context<IFormContext> = createReactContext({});
 
 export class Form extends React.Component<IFormProps, IFormState> {
   private validator: Validator;
-  private form: HTMLFormElement | null = null;
   constructor(props: IFormProps) {
     super(props);
 
@@ -132,7 +132,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
           onSubmit={this._onSubmit}
           onChange={this._onFormChange}
           onBlur={this._onFormBlur}
-          ref={ref => { this.form = ref; }}
+          ref={this.props.formRef}
         >
           {this.props.children}
         </form >
