@@ -82,6 +82,11 @@ export default class Render extends React.Component<propsType, IState> {
     } = this.props;
 
     const type = this.props.fieldProps.validationRules && this.props.fieldProps.validationRules.type;
+    let errors: string[] = [];
+    if (field)
+      errors = [...errors, ...field.errors, ...field.customErrors];
+    if (this.props.fieldProps.errorMessages)
+      errors = [...errors, ...this.props.fieldProps.errorMessages];
 
     return (
       React.createElement(this.props.fieldProps.render, {
@@ -135,7 +140,7 @@ export default class Render extends React.Component<propsType, IState> {
           `${this.props.fieldProps.label}*` :
           this.props.fieldProps.label,
         validationRules: this.props.fieldProps.validationRules,
-        errors: field && [...field.errors, ...field.customErrors],
+        errors,
       })
     );
   }

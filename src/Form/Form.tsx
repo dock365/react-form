@@ -85,7 +85,7 @@ export interface IFormContext {
   showAsteriskOnRequired?: boolean;
   resetFields?: (name?: string | string[]) => void;
   validateOn?: ValidateOnTypes;
-  updateCustomValidationMessage?: (name: string, messages?: string[]) => void;
+  updateCustomValidationMessage?: (name: string, messages?: Promise<string[]>) => void;
 }
 
 export const FormContext: Context<IFormContext> = createReactContext({});
@@ -299,11 +299,14 @@ export class Form extends React.Component<IFormProps, IFormState> {
     return true;
   }
 
-  private _updateCustomValidationMessage(name: string, messages?: string[]) {
-    this.setState(prevState => ({
-      fields: prevState.fields
-        .map(item => item.name === name ? { ...item, customErrors: messages || [] } : item),
-    }));
+  private _updateCustomValidationMessage(name: string, messages?: Promise<string[]>) {
+    if (messages)
+      messages.then((errors) => {
+        this.setState(prevState => ({
+          fields: prevState.fields
+            .map(item => item.name === name ? { ...item, customErrors: errors || [] } : item),
+        }));
+      });
   }
 
   private _resetFields(name?: string | string[]) {

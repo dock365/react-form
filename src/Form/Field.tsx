@@ -31,7 +31,8 @@ export interface IFieldProps {
   onBlur?: (value: any, resetFields?: (name?: string | string[]) => void) => void;
   validationRules?: validationRules;
   customProps?: any;
-  customValidation?: (value?: any, validationRules?: validationRules) => string[];
+  errorMessages?: string[];
+  customValidation?: (value?: any, validationRules?: validationRules) => Promise<string[]>;
 }
 export interface IFieldState {
   shouldUpdate: boolean;
