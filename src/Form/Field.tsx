@@ -20,6 +20,7 @@ export interface IFieldRenderProps {
   validationRules?: validationRules;
   errors?: string[];
   resetFields?: (name?: string | string[]) => void;
+  fetching?: boolean;
 }
 export interface IFieldProps {
   name: string;

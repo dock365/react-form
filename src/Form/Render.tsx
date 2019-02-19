@@ -96,6 +96,7 @@ export default class Render extends React.Component<propsType, IState> {
         value: field && field.value,
         customProps: this.props.fieldProps.customProps,
         resetFields,
+        fetching: field && field.validating,
         onChange: (
           value: any,
           e?: React.MouseEvent<HTMLInputElement>,

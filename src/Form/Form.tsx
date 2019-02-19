@@ -56,6 +56,7 @@ export interface IField {
   customErrors: string[];
   validationRules?: validationRules;
   updated?: boolean;
+  validating?: boolean;
 }
 
 export interface IFormState {
@@ -300,13 +301,18 @@ export class Form extends React.Component<IFormProps, IFormState> {
   }
 
   private _updateCustomValidationMessage(name: string, messages?: Promise<string[]>) {
-    if (messages)
+    if (messages) {
+      this.setState(prevState => ({
+        fields: prevState.fields
+          .map(item => item.name === name ? { ...item, validating: true } : item),
+      }));
       messages.then((errors) => {
         this.setState(prevState => ({
           fields: prevState.fields
-            .map(item => item.name === name ? { ...item, customErrors: errors || [] } : item),
+            .map(item => item.name === name ? { ...item, customErrors: errors || [], validating: false } : item),
         }));
       });
+    }
   }
 
   private _resetFields(name?: string | string[]) {
