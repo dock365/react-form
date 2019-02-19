@@ -224,6 +224,11 @@ export class Form extends React.Component<IFormProps, IFormState> {
 
   private _onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const prevent = this.state.fields.reduce((prev, field) => field.validating || prev, false);
+
+    if (prevent) {
+      return false;
+    }
     if (this.props.validateOn) {
       this._validateAll(() => {
         if (this.props.onSubmit)
