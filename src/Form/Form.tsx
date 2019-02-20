@@ -335,9 +335,9 @@ export class Form extends React.Component<IFormProps, IFormState> {
         });
       }
     } else {
-      this.setState({
-        fields: [],
-      });
+      this.setState((prevState) => ({
+        fields: prevState.fields.map(field => ({ ...field, value: null })),
+      }));
     }
   }
 }
