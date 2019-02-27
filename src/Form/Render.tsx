@@ -23,8 +23,8 @@ export default class Render extends React.Component<propsType, IState> {
       this.setState({
         field: this.props.fields && this.props.fields.find((item: any) => item.name === this.props.fieldProps.name),
       });
-      this._initialize();
     }
+    this._initialize();
   }
 
   public componentDidUpdate(prevProps: propsType) {
