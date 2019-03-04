@@ -281,6 +281,10 @@ export class Form extends React.Component<IFormProps, IFormState> {
           result =
             this.validator[validationTypes.Email](field.label || field.name, field.value || "", field.validationRules);
           break;
+        case validationTypes.Array:
+        result =
+          this.validator[validationTypes.Array](field.label || field.name, field.value || "", field.validationRules);
+        break;
 
         default:
           result = {
