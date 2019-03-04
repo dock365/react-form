@@ -5,11 +5,11 @@ import Validator, {
   INumberValidationOptions,
   IDateValidationOptions,
   IEmailValidationOptions,
+  IArrayValidationOptions,
   validationTypes,
   IValidationResponse,
 } from "@dock365/validator";
 import createReactContext, { Context, ProviderProps } from 'create-react-context';
-import { IArrayValidationOptions } from "@dock365/validator/dist/validators/IValidationOptions";
 
 export enum ValidateOnTypes {
   Submit = 1,
@@ -282,9 +282,9 @@ export class Form extends React.Component<IFormProps, IFormState> {
             this.validator[validationTypes.Email](field.label || field.name, field.value || "", field.validationRules);
           break;
         case validationTypes.Array:
-        result =
-          this.validator[validationTypes.Array](field.label || field.name, field.value || "", field.validationRules);
-        break;
+          result =
+            this.validator[validationTypes.Array](field.label || field.name, field.value || "", field.validationRules);
+          break;
 
         default:
           result = {
