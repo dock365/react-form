@@ -26,6 +26,7 @@ export interface IFormProps {
   onBlur?: (
     e: FormEvent<HTMLFormElement>,
     values: IFieldValues,
+    validationStatus?: boolean,
     resetFields?: (name?: string | string[]) => void,
   ) => void;
   onChange?: (
@@ -219,8 +220,10 @@ export class Form extends React.Component<IFormProps, IFormState> {
   }
 
   private _onFormBlur(e: FormEvent<HTMLFormElement>) {
-    if (this.props.onBlur) {
-      this.props.onBlur(e, this._structuredValues(), this._resetFields);
+    if (this.props.validateOn && this.props.validateOn === ValidateOnTypes.FieldBlur && this.props.onBlur) {
+        this.props.onBlur(e, this._structuredValues(), this._validateAll(), this._resetFields);
+    } else if (this.props.onBlur) {
+      this.props.onBlur(e, this._structuredValues(), true, this._resetFields);
     }
   }
 
@@ -249,11 +252,13 @@ export class Form extends React.Component<IFormProps, IFormState> {
     return values;
   }
 
-  private _validateAll(cb?: () => void) {
+  private _validateAll(cb?: () => void): boolean {
     const success = this.state.fields
       .reduce((prevValue, field) => this._validateField(field) && prevValue && field.customErrors.length === 0, true);
     if (success && cb)
       cb();
+
+    return success;
   }
 
   private _validateField(field: IField) {
