@@ -9,6 +9,7 @@ import Validator, {
   IValidationResponse,
 } from "@dock365/validator";
 import createReactContext, { Context, ProviderProps } from 'create-react-context';
+import { IArrayValidationOptions } from "@dock365/validator/dist/validators/IValidationOptions";
 
 export enum ValidateOnTypes {
   Submit = 1,
@@ -46,6 +47,7 @@ export type validationRules =
   (IStringValidationOptions & { type: validationTypes.String }) |
   (INumberValidationOptions & { type: validationTypes.Number }) |
   (IDateValidationOptions & { type: validationTypes.Date }) |
+  (IArrayValidationOptions & { type: validationTypes.Array }) |
   (IEmailValidationOptions & { type: validationTypes.Email });
 
 export interface IField {
