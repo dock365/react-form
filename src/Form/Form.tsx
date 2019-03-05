@@ -60,6 +60,7 @@ export interface IField {
   validationRules?: validationRules;
   updated?: boolean;
   validating?: boolean;
+  promise?: Promise<void>;
 }
 
 export interface IFormState {
@@ -221,7 +222,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
 
   private _onFormBlur(e: FormEvent<HTMLFormElement>) {
     if (this.props.validateOn && this.props.validateOn === ValidateOnTypes.FieldBlur && this.props.onBlur) {
-        this.props.onBlur(e, this._structuredValues(), this._validateAll(), this._resetFields);
+      this.props.onBlur(e, this._structuredValues(), this._validateAll(), this._resetFields);
     } else if (this.props.onBlur) {
       this.props.onBlur(e, this._structuredValues(), true, this._resetFields);
     }
@@ -229,20 +230,20 @@ export class Form extends React.Component<IFormProps, IFormState> {
 
   private _onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const prevent = this.state.fields.reduce((prev, field) => field.validating || prev, false);
+    const validating = this.state.fields.map((field) => field.promise);
 
-    if (prevent) {
-      return false;
-    }
-    if (this.props.validateOn) {
-      this._validateAll(() => {
-        if (this.props.onSubmit)
-          this.props.onSubmit(e, this._structuredValues(), this._resetFields);
+    Promise.all(validating)
+      .then(() => {
+        if (this.props.validateOn) {
+          this._validateAll(() => {
+            if (this.props.onSubmit)
+              this.props.onSubmit(e, this._structuredValues(), this._resetFields);
+          });
+        } else {
+          if (!this.state.hasError && this.props.onSubmit)
+            this.props.onSubmit(e, this._structuredValues(), this._resetFields);
+        }
       });
-    } else {
-      if (!this.state.hasError && this.props.onSubmit)
-        this.props.onSubmit(e, this._structuredValues(), this._resetFields);
-    }
   }
 
   private _structuredValues(): IFieldValues {
@@ -316,19 +317,24 @@ export class Form extends React.Component<IFormProps, IFormState> {
     return true;
   }
 
-  private _updateCustomValidationMessage(name: string, messages?: Promise<string[]>) {
+  private _updateCustomValidationMessage(name: string, messages?: Promise<string[]>): Promise<void> {
     if (messages) {
-      this.setState(prevState => ({
-        fields: prevState.fields
-          .map(item => item.name === name ? { ...item, validating: true } : item),
-      }));
-      messages.then((errors) => {
+      const promise = messages.then((errors) => {
         this.setState(prevState => ({
           fields: prevState.fields
-            .map(item => item.name === name ? { ...item, customErrors: errors || [], validating: false } : item),
+            .map(item => item.name === name ? { ...item, customErrors: errors || [] } : item),
         }));
       });
+
+      this.setState(prevState => ({
+        fields: prevState.fields
+          .map(item => item.name === name ? { ...item, promise } : item),
+      }));
+
+      return promise;
     }
+
+    return Promise.resolve();
   }
 
   private _resetFields(name?: string | string[]) {
