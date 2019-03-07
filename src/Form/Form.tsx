@@ -164,6 +164,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
                 errors: [],
                 customErrors: [],
                 updated: false,
+                value,
               },
             ],
           }
