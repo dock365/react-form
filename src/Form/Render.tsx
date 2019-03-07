@@ -109,7 +109,7 @@ export default class Render extends React.Component<propsType, IState> {
         ) => {
           const _value = type === validationTypes.String && typeof value === "number" ?
             `${value}` : value;
-          if (onChange) onChange(_value, this.props.fieldProps.name, e);
+          if (onChange && this.props.fieldProps.value === undefined) onChange(_value, this.props.fieldProps.name, e);
           if (this.props.fieldProps.onChange) this.props.fieldProps.onChange(_value, resetFields);
           if (
             validateOn === ValidateOnTypes.FieldChange &&
@@ -128,7 +128,7 @@ export default class Render extends React.Component<propsType, IState> {
         ) => {
           const _value = type === validationTypes.String && typeof value === "number" ?
             `${value}` : value;
-          if (onBlur) onBlur(_value, this.props.fieldProps.name, e);
+          if (onBlur && this.props.fieldProps.value === undefined) onBlur(_value, this.props.fieldProps.name, e);
           if (this.props.fieldProps.onBlur) this.props.fieldProps.onBlur(_value, resetFields);
           if (
             validateOn === ValidateOnTypes.FieldBlur &&
