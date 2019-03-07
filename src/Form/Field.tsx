@@ -27,6 +27,7 @@ export interface IFieldProps {
   label?: string;
   placeholder?: string;
   defaultValue?: any;
+  value?: any;
   render: React.ComponentType<IFieldRenderProps>;
   onChange?: (value: any, resetFields?: (name?: string | string[]) => void) => void;
   onBlur?: (value: any, resetFields?: (name?: string | string[]) => void) => void;

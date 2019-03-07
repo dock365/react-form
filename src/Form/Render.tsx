@@ -25,6 +25,8 @@ export default class Render extends React.Component<propsType, IState> {
       });
       this._initialize();
     }
+
+
   }
 
   public componentDidUpdate(prevProps: propsType) {
@@ -58,6 +60,10 @@ export default class Render extends React.Component<propsType, IState> {
           ),
         );
       }
+    }
+
+    if(this.props.fieldProps.value !== prevProps.fieldProps.value && this.props.onChange) {
+      this.props.onChange(this.props.fieldProps.value, this.props.fieldProps.name);
     }
   }
 
@@ -152,6 +158,7 @@ export default class Render extends React.Component<propsType, IState> {
         this.props.fieldProps.name,
         this.props.fieldProps.label,
         this.props.fieldProps.validationRules,
+        this.props.fieldProps.value,
       );
     }
   }
