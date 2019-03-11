@@ -101,7 +101,6 @@ export default class Render extends React.Component<propsType, IState> {
         defaultValue: this.props.fieldProps.defaultValue,
         value: field && field.value,
         customProps: this.props.fieldProps.customProps,
-        hideLabel: this.props.fieldProps.hideLabel,
         resetFields,
         fetching: field && field.validating,
         onChange: (
@@ -142,11 +141,11 @@ export default class Render extends React.Component<propsType, IState> {
             );
           }
         },
-        label: showAsteriskOnRequired &&
+        label: !this.props.fieldProps.hideLabel && (showAsteriskOnRequired &&
           this.props.fieldProps.validationRules &&
           this.props.fieldProps.validationRules.required ?
           `${this.props.fieldProps.label}*` :
-          this.props.fieldProps.label,
+          this.props.fieldProps.label) || undefined,
         validationRules: this.props.fieldProps.validationRules,
         errors,
       })

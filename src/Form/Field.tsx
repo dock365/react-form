@@ -7,7 +7,6 @@ export interface IFieldRenderProps {
   placeholder?: string;
   defaultValue?: any;
   value?: any;
-  hideLabel?: boolean;
   customProps?: any;
   onChange?: (
     value: any,
