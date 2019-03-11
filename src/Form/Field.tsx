@@ -7,6 +7,7 @@ export interface IFieldRenderProps {
   placeholder?: string;
   defaultValue?: any;
   value?: any;
+  hideLabel?: boolean;
   customProps?: any;
   onChange?: (
     value: any,
@@ -34,6 +35,7 @@ export interface IFieldProps {
   validationRules?: validationRules;
   customProps?: any;
   errorMessages?: string[];
+  hideLabel?: boolean;
   customValidation?: (value?: any, validationRules?: validationRules) => Promise<string[]>;
 }
 export interface IFieldState {

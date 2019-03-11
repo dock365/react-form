@@ -101,6 +101,7 @@ export default class Render extends React.Component<propsType, IState> {
         defaultValue: this.props.fieldProps.defaultValue,
         value: field && field.value,
         customProps: this.props.fieldProps.customProps,
+        hideLabel: this.props.fieldProps.hideLabel,
         resetFields,
         fetching: field && field.validating,
         onChange: (
