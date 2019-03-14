@@ -62,9 +62,14 @@ export default class Render extends React.Component<propsType, IState> {
       }
     }
 
-    if(this.props.fieldProps.value !== prevProps.fieldProps.value && this.props.onChange) {
+    if (this.props.fieldProps.value !== prevProps.fieldProps.value && this.props.onChange) {
       this.props.onChange(this.props.fieldProps.value, this.props.fieldProps.name);
     }
+  }
+
+  public componentWillUnmount() {
+    if (this.props.unmountField)
+      this.props.unmountField(this.props.fieldProps.name)
   }
 
   // public shouldComponentUpdate(nextProps: propsType, nextState: IState) {

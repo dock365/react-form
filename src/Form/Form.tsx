@@ -91,6 +91,7 @@ export interface IFormContext {
   resetFields?: (name?: string | string[]) => void;
   validateOn?: ValidateOnTypes;
   updateCustomValidationMessage?: (name: string, messages?: Promise<string[]>) => void;
+  unmountField?: (name: string) => void;
 }
 
 export const FormContext: Context<IFormContext> = createReactContext({});
@@ -119,6 +120,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
 
     this._resetFields = this._resetFields.bind(this);
     this._updateCustomValidationMessage = this._updateCustomValidationMessage.bind(this);
+    this._unmountField = this._unmountField.bind(this);
   }
 
   public render() {
@@ -132,6 +134,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
         resetFields: this._resetFields,
         validateOn: this.props.validateOn,
         updateCustomValidationMessage: this._updateCustomValidationMessage,
+        unmountField: this._unmountField,
       }}>
         <form
           onSubmit={this._onSubmit}
@@ -227,6 +230,12 @@ export class Form extends React.Component<IFormProps, IFormState> {
     } else if (this.props.onBlur) {
       this.props.onBlur(e, this._structuredValues(), true, this._resetFields);
     }
+  }
+
+  private _unmountField(name: string) {
+    this.setState(prevState => ({
+      fields: prevState.fields.filter(field => field.name !== name),
+    }))
   }
 
   private _onSubmit(e: FormEvent<HTMLFormElement>) {
