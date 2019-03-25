@@ -1,6 +1,6 @@
 {
   "name": "@dock365/reform",
-  "version": "0.11.6-6",
+  "version": "0.11.6-7",
   "description": "React components for form and input field management",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
