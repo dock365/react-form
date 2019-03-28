@@ -38,10 +38,11 @@ export interface IFormProps {
   validateOn?: ValidateOnTypes;
   showAsteriskOnRequired?: boolean;
   formRef?: (ref: HTMLFormElement | null) => void;
+  values?: IFieldValues;
 }
 
 export interface IFieldValues {
-  [name: string]: string | number | boolean;
+  [name: string]: any;
 }
 
 export type validationRules =
@@ -121,6 +122,14 @@ export class Form extends React.Component<IFormProps, IFormState> {
     this._resetFields = this._resetFields.bind(this);
     this._updateCustomValidationMessage = this._updateCustomValidationMessage.bind(this);
     this._unmountField = this._unmountField.bind(this);
+  }
+
+  public componentDidUpdate(prevProps: IFormProps) {
+    if (this.props.values && (this.props.values !== prevProps.values)) {
+      this._updateValues(this.props.values);
+    } else if ((this.props.values !== prevProps.values) && !this.props.values) {
+      this._resetFields();
+    }
   }
 
   public render() {
@@ -261,6 +270,15 @@ export class Form extends React.Component<IFormProps, IFormState> {
     this.state.fields.forEach(field => values[field.name] = field.value);
 
     return values;
+  }
+
+  private _updateValues(values: IFieldValues) {
+    this.setState(prevState => ({
+      fields: prevState.fields.map(field => ({
+        ...field,
+        value: values[field.name],
+      })),
+    }));
   }
 
   private _validateAll(cb?: () => void): boolean {
