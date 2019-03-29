@@ -10,6 +10,8 @@ import Validator, {
   IValidationResponse,
 } from "@dock365/validator";
 import createReactContext, { Context, ProviderProps } from 'create-react-context';
+import { Promise } from 'es6-promise';
+
 
 export enum ValidateOnTypes {
   Submit = 1,

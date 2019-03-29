@@ -52,6 +52,7 @@
   "dependencies": {
     "@dock365/validator": "^0.11.1",
     "create-react-context": "^0.2.3",
+    "es6-promise": "^4.2.6",
     "prop-types": "^15.6.2"
   }
 }

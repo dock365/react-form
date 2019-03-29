@@ -2,6 +2,8 @@ import * as React from 'react';
 import { FormContext, validationRules, ValidateOnTypes } from './Form';
 import { validationTypes } from '@dock365/validator';
 import Render from './Render';
+import { Promise } from 'es6-promise';
+
 export interface IFieldRenderProps {
   name: string;
   placeholder?: string;
