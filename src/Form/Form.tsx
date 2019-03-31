@@ -41,6 +41,7 @@ export interface IFormProps {
   showAsteriskOnRequired?: boolean;
   formRef?: (ref: HTMLFormElement | null) => void;
   values?: IFieldValues;
+  readOnly?: boolean;
 }
 
 export interface IFieldValues {
@@ -95,6 +96,7 @@ export interface IFormContext {
   validateOn?: ValidateOnTypes;
   updateCustomValidationMessage?: (name: string, messages?: Promise<string[]>) => void;
   unmountField?: (name: string) => void;
+  readOnly?: boolean;
 }
 
 export const FormContext: Context<IFormContext> = createReactContext({});
@@ -146,6 +148,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
         validateOn: this.props.validateOn,
         updateCustomValidationMessage: this._updateCustomValidationMessage,
         unmountField: this._unmountField,
+        readOnly: this.props.readOnly,
       }}>
         <form
           onSubmit={this._onSubmit}

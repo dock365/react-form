@@ -23,6 +23,7 @@ export interface IFieldRenderProps {
   errors?: string[];
   resetFields?: (name?: string | string[]) => void;
   fetching?: boolean;
+  readOnly?: boolean;
 }
 export interface IFieldProps {
   name: string;
@@ -38,6 +39,7 @@ export interface IFieldProps {
   errorMessages?: string[];
   hideLabel?: boolean;
   customValidation?: (value?: any, validationRules?: validationRules) => Promise<string[]>;
+  readOnly?: boolean;
 }
 export interface IFieldState {
   shouldUpdate: boolean;
