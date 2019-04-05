@@ -128,6 +128,12 @@ export class Form extends React.Component<IFormProps, IFormState> {
     this._unmountField = this._unmountField.bind(this);
   }
 
+  public componentDidMount() {
+    if (this.props.values) {
+      this._updateValues(this.props.values);
+    }
+  }
+
   public componentDidUpdate(prevProps: IFormProps) {
     if (this.props.values && (this.props.values !== prevProps.values)) {
       this._updateValues(this.props.values);
