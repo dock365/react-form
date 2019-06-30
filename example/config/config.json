@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "reform-webpart-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/reformWebpart/ReformWebpartWebPart.js",
+          "manifest": "./src/webparts/reformWebpart/ReformWebpartWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "ReformWebpartWebPartStrings": "lib/webparts/reformWebpart/loc/{locale}.js"
+  }
+}
