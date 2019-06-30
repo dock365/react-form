@@ -25,8 +25,6 @@ export default class Render extends React.Component<propsType, IState> {
       });
       this._initialize();
     }
-
-
   }
 
   public componentDidUpdate(prevProps: propsType) {
@@ -67,10 +65,12 @@ export default class Render extends React.Component<propsType, IState> {
     }
   }
 
-  public componentWillUnmount() {
-    if (this.props.unmountField)
-      this.props.unmountField(this.props.fieldProps.name)
-  }
+  // public componentWillUnmount() {
+  //   debugger
+  //   if (this.props.unmountField) {
+  //     this.props.unmountField(this.props.fieldProps.name);
+  //   }
+  // }
 
   // public shouldComponentUpdate(nextProps: propsType, nextState: IState) {
   //   return this.state.field !== nextState.field ? true : false;

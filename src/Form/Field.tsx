@@ -46,14 +46,35 @@ export interface IFieldState {
 }
 
 export class Field extends React.Component<IFieldProps, IFieldState> {
+  private _unmountField: any;
   constructor(props: IFieldProps) {
     super(props);
   }
 
+  public componentDidMount() {
+    debugger;
+  }
+
+  public componentWillUnmount() {
+    debugger;
+    if (this._unmountField) {
+      this._unmountField();
+    }
+  }
+
   public render() {
     return (
-      <FormContext.Consumer >
-        {(props) => <Render {...props} fieldProps={this.props} />}
+      <FormContext.Consumer>
+        {(props) => {
+          this._unmountField = props.unmountField;
+
+          return (
+            <Render
+              {...props}
+              fieldProps={this.props}
+            />
+          )
+        }}
       </FormContext.Consumer>
     );
   }

@@ -1,4 +1,4 @@
-import React, { FormEvent, ReactHTMLElement } from "react";
+import React, { FormEvent, ReactHTMLElement, Context, createContext } from "react";
 import Validator, {
   IValidationFailMessages,
   IStringValidationOptions,
@@ -9,7 +9,7 @@ import Validator, {
   validationTypes,
   IValidationResponse,
 } from "@dock365/validator";
-import createReactContext, { Context, ProviderProps } from 'create-react-context';
+// import createReactContext, { Context, ProviderProps } from 'create-react-context';
 import { Promise } from 'es6-promise';
 
 
@@ -99,7 +99,7 @@ export interface IFormContext {
   readOnly?: boolean;
 }
 
-export const FormContext: Context<IFormContext> = createReactContext({});
+export const FormContext: Context<IFormContext> = createContext({});
 
 export class Form extends React.Component<IFormProps, IFormState> {
   private validator: Validator;
@@ -253,6 +253,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
   }
 
   private _unmountField(name: string) {
+    debugger;
     this.setState(prevState => ({
       fields: prevState.fields.filter(field => field.name !== name),
     }))
