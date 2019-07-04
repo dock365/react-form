@@ -98,7 +98,7 @@ export default class Render extends React.Component<propsType, IState> {
         resetFields,
         fetching: field && field.validating,
         readOnly: this.props.readOnly || this.props.fieldProps.readOnly,
-        ref: this.props.fieldProps.ref,
+        componentRef: this.props.fieldProps.componentRef,
         onChange: (
           value: any,
           e?: React.MouseEvent<HTMLInputElement>,
