@@ -53,12 +53,7 @@ export class Field extends React.Component<IFieldProps, IFieldState> {
     super(props);
   }
 
-  public componentDidMount() {
-    debugger;
-  }
-
   public componentWillUnmount() {
-    debugger;
     if (this._unmountField) {
       this._unmountField();
     }

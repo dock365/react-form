@@ -253,7 +253,6 @@ export class Form extends React.Component<IFormProps, IFormState> {
   }
 
   private _unmountField(name: string) {
-    debugger;
     this.setState(prevState => ({
       fields: prevState.fields.filter(field => field.name !== name),
     }))
