@@ -24,6 +24,7 @@ export interface IFieldRenderProps {
   resetFields?: (name?: string | string[]) => void;
   fetching?: boolean;
   readOnly?: boolean;
+  ref?: React.Ref<HTMLElement>
 }
 export interface IFieldProps {
   name: string;
@@ -40,6 +41,7 @@ export interface IFieldProps {
   hideLabel?: boolean;
   customValidation?: (value?: any, validationRules?: validationRules) => Promise<string[]>;
   readOnly?: boolean;
+  ref?: React.Ref<HTMLElement>
 }
 export interface IFieldState {
   shouldUpdate: boolean;
