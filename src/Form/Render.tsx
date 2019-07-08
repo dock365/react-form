@@ -65,6 +65,11 @@ export default class Render extends React.Component<propsType, IState> {
     }
   }
 
+  public componentWillUnmount() {
+    if (this.props.unmountField)
+      this.props.unmountField(this.props.fieldProps.name);
+  }
+
   public render() {
     const { field } = this.state;
     if (!field) {
