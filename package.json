@@ -34,7 +34,8 @@
   "homepage": "https://github.com/dock365/reform#readme",
   "peerDependencies": {
     "react": ">= 15.5.8",
-    "react-dom": ">= 15.5.8"
+    "react-dom": ">= 15.5.8",
+    "@dock365/validator": ">=0.11.6"
   },
   "devDependencies": {
     "@braces/tslint-config": "^0.3.1",
@@ -48,10 +49,10 @@
     "react-dom": "^16.3.3",
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
-    "typescript": "^3.0.1"
+    "typescript": "^3.0.1",
+    "@dock365/validator": "^0.11.6"
   },
   "dependencies": {
-    "@dock365/validator": "^0.11.6",
     "es6-promise": "^4.2.6",
     "prop-types": "^15.6.2"
   }
