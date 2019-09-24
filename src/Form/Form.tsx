@@ -10,7 +10,7 @@ import Validator, {
   IValidationResponse,
 } from "@dock365/validator";
 // import createReactContext, { Context, ProviderProps } from 'create-react-context';
-import { Promise } from 'es6-promise';
+// import { Promise } from 'es6-promise';
 
 
 export enum ValidateOnTypes {
@@ -258,22 +258,24 @@ export class Form extends React.Component<IFormProps, IFormState> {
     }))
   }
 
-  private _onSubmit(e: FormEvent<HTMLFormElement>) {
+  private async _onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const validating = this.state.fields.map((field) => field.promise);
+    const event = {...e};
 
-    Promise.all(validating)
-      .then(() => {
-        if (this.props.validateOn) {
-          this._validateAll(() => {
-            if (this.props.onSubmit)
-              this.props.onSubmit(e, this._structuredValues(), this._resetFields);
-          });
-        } else {
-          if (!this.state.hasError && this.props.onSubmit)
-            this.props.onSubmit(e, this._structuredValues(), this._resetFields);
-        }
+    await Promise.all(validating)
+
+    if (this.props.validateOn) {
+      this._validateAll(() => {
+        if (this.props.onSubmit)
+          this.props.onSubmit(event, this._structuredValues(), this._resetFields);
       });
+    } else {
+      if (!this.state.hasError && this.props.onSubmit) {
+
+        this.props.onSubmit(event, this._structuredValues(), this._resetFields);
+      }
+    }
   }
 
   private _structuredValues(): IFieldValues {
