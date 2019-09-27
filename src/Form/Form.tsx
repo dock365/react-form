@@ -241,16 +241,21 @@ export class Form extends React.Component<IFormProps, IFormState> {
   }
 
   private _onFormChange(e: FormEvent<HTMLFormElement>) {
+
     if (this.props.onChange) {
-      this.props.onChange(e, this._structuredValues(), this._resetFields);
+      const fields = this._trimmedValues(this.state.fields)
+      this.props.onChange(e, this._structuredValues(fields), this._resetFields);
     }
   }
 
   private _onFormBlur(e: FormEvent<HTMLFormElement>) {
+
     if (this.props.validateOn && this.props.validateOn === ValidateOnTypes.FieldBlur && this.props.onBlur) {
-      this.props.onBlur(e, this._structuredValues(), this._validateAll(), this._resetFields);
+      const fields = this._trimmedValues(this.state.fields)
+      this.props.onBlur(e, this._structuredValues(fields), this._validateAll(), this._resetFields);
     } else if (this.props.onBlur) {
-      this.props.onBlur(e, this._structuredValues(), true, this._resetFields);
+      const fields = this._trimmedValues(this.state.fields)
+      this.props.onBlur(e, this._structuredValues(fields), true, this._resetFields);
     }
   }
 
@@ -263,10 +268,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
   private async _onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const fields = this.state.fields.map(field => ({
-      ...field,
-      value: typeof field.value === "string" && field.autoTrimTrailingSpaces ? field.value.trim() : field.value,
-    }))
+    const fields = this._trimmedValues(this.state.fields)
 
     const validating = fields.map((field) => field.promise);
     const event = {...e};
@@ -284,6 +286,13 @@ export class Form extends React.Component<IFormProps, IFormState> {
         this.props.onSubmit(event, this._structuredValues(fields), this._resetFields);
       }
     }
+  }
+
+  private _trimmedValues(fields: IField[]): IField[] {
+    return fields.map(field => ({
+      ...field,
+      value: typeof field.value === "string" && field.autoTrimTrailingSpaces ? field.value.trim() : field.value,
+    }));
   }
 
   private _structuredValues(fields: IField[]): IFieldValues {
