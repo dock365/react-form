@@ -110,9 +110,6 @@ export default class Render extends React.Component<propsType, IState> {
         ) => {
           let _value = type === validationTypes.String && typeof value === "number" ?
             `${value}` : value;
-          if(this.props.fieldProps.autoTrimTrailingSpaces && typeof _value === "string") {
-            _value = _value.trim();
-          }
           if (onChange && this.props.fieldProps.value === undefined) onChange(_value, this.props.fieldProps.name, e);
           if (this.props.fieldProps.onChange) this.props.fieldProps.onChange(_value, resetFields);
           if (
@@ -163,6 +160,7 @@ export default class Render extends React.Component<propsType, IState> {
         this.props.fieldProps.label,
         this.props.fieldProps.validationRules,
         this.props.fieldProps.value,
+        this.props.fieldProps.autoTrimTrailingSpaces
       );
     }
   }

@@ -65,6 +65,7 @@ export interface IField {
   updated?: boolean;
   validating?: boolean;
   promise?: Promise<void>;
+  autoTrimTrailingSpaces?: boolean;
 }
 
 export interface IFormState {
@@ -89,7 +90,7 @@ export interface IFormContext {
     label?: string,
     validationRules?: validationRules,
     value?: any,
-    update?: boolean,
+    autoTrimTrailingSpaces?: boolean,
   ) => void;
   showAsteriskOnRequired?: boolean;
   resetFields?: (name?: string | string[]) => void;
@@ -168,7 +169,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
     );
   }
 
-  private _initializeField(name: string, label?: string, _validationRules?: validationRules, value?: any) {
+  private _initializeField(name: string, label?: string, _validationRules?: validationRules, value?: any, autoTrimTrailingSpaces?: boolean) {
     if (!name) {
       return;
     }
@@ -188,6 +189,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
                 customErrors: [],
                 updated: false,
                 value,
+                autoTrimTrailingSpaces,
               },
             ],
           }
@@ -260,7 +262,13 @@ export class Form extends React.Component<IFormProps, IFormState> {
 
   private async _onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const validating = this.state.fields.map((field) => field.promise);
+
+    const fields = this.state.fields.map(field => ({
+      ...field,
+      value: typeof field.value === "string" && field.autoTrimTrailingSpaces ? field.value.trim() : field.value,
+    }))
+
+    const validating = fields.map((field) => field.promise);
     const event = {...e};
 
     await Promise.all(validating)
@@ -268,19 +276,19 @@ export class Form extends React.Component<IFormProps, IFormState> {
     if (this.props.validateOn) {
       this._validateAll(() => {
         if (this.props.onSubmit)
-          this.props.onSubmit(event, this._structuredValues(), this._resetFields);
+          this.props.onSubmit(event, this._structuredValues(fields), this._resetFields);
       });
     } else {
       if (!this.state.hasError && this.props.onSubmit) {
 
-        this.props.onSubmit(event, this._structuredValues(), this._resetFields);
+        this.props.onSubmit(event, this._structuredValues(fields), this._resetFields);
       }
     }
   }
 
-  private _structuredValues(): IFieldValues {
+  private _structuredValues(fields: IField[]): IFieldValues {
     const values: IFieldValues = {};
-    this.state.fields.forEach(field => values[field.name] = field.value);
+    fields.forEach(field => values[field.name] = field.value);
 
     return values;
   }
