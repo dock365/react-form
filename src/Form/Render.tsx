@@ -108,8 +108,11 @@ export default class Render extends React.Component<propsType, IState> {
           value: any,
           e?: React.MouseEvent<HTMLInputElement>,
         ) => {
-          const _value = type === validationTypes.String && typeof value === "number" ?
+          let _value = type === validationTypes.String && typeof value === "number" ?
             `${value}` : value;
+          if(this.props.fieldProps.autoTrimTrailingSpaces && typeof _value === "string") {
+            _value = _value.trim();
+          }
           if (onChange && this.props.fieldProps.value === undefined) onChange(_value, this.props.fieldProps.name, e);
           if (this.props.fieldProps.onChange) this.props.fieldProps.onChange(_value, resetFields);
           if (

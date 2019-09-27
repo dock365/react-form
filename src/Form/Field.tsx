@@ -41,12 +41,16 @@ export interface IFieldProps {
   customValidation?: (value?: any, validationRules?: validationRules) => Promise<string[]>;
   readOnly?: boolean;
   componentRef?: any;
+  autoTrimTrailingSpaces?: boolean;
 }
 export interface IFieldState {
   shouldUpdate: boolean;
 }
 
 export class Field extends React.Component<IFieldProps, IFieldState> {
+  static defaultProps = {
+    autoTrimTrailingSpaces: true
+  };
   constructor(props: IFieldProps) {
     super(props);
   }
