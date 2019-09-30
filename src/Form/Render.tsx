@@ -76,17 +76,10 @@ export default class Render extends React.Component<propsType, IState> {
       return null;
     }
     const {
-      fields,
-      onChange,
-      onBlur,
-      initialize,
       showAsteriskOnRequired,
       resetFields,
-      validateOn,
-      updateCustomValidationMessage,
     } = this.props;
 
-    const type = this.props.fieldProps.validationRules && this.props.fieldProps.validationRules.type;
     let errors: string[] = [];
     if (field)
       errors = [...errors, ...field.errors, ...field.customErrors];
@@ -104,44 +97,8 @@ export default class Render extends React.Component<propsType, IState> {
         fetching: field && field.validating,
         readOnly: this.props.readOnly || this.props.fieldProps.readOnly,
         componentRef: this.props.fieldProps.componentRef,
-        onChange: (
-          value: any,
-          e?: React.MouseEvent<HTMLInputElement>,
-        ) => {
-          let _value = type === validationTypes.String && typeof value === "number" ?
-            `${value}` : value;
-          if (onChange && this.props.fieldProps.value === undefined) onChange(_value, this.props.fieldProps.name, e);
-          if (this.props.fieldProps.onChange) this.props.fieldProps.onChange(_value, resetFields);
-          if (
-            validateOn === ValidateOnTypes.FieldChange &&
-            this.props.fieldProps.customValidation &&
-            updateCustomValidationMessage
-          ) {
-            updateCustomValidationMessage(
-              field.name,
-              this.props.fieldProps.customValidation(_value, this.props.fieldProps.validationRules),
-            );
-          }
-        },
-        onBlur: (
-          value: any,
-          e?: React.MouseEvent<HTMLInputElement>,
-        ) => {
-          const _value = type === validationTypes.String && typeof value === "number" ?
-            `${value}` : value;
-          if (onBlur && this.props.fieldProps.value === undefined) onBlur(_value, this.props.fieldProps.name, e);
-          if (this.props.fieldProps.onBlur) this.props.fieldProps.onBlur(_value, resetFields);
-          if (
-            validateOn === ValidateOnTypes.FieldBlur &&
-            this.props.fieldProps.customValidation &&
-            updateCustomValidationMessage
-          ) {
-            updateCustomValidationMessage(
-              field.name,
-              this.props.fieldProps.customValidation(_value, this.props.fieldProps.validationRules),
-            );
-          }
-        },
+        onChange: this._onChange,
+        onBlur: this._onBlur,
         label: !this.props.fieldProps.hideLabel && (showAsteriskOnRequired &&
           this.props.fieldProps.validationRules &&
           this.props.fieldProps.validationRules.required ?
@@ -164,4 +121,59 @@ export default class Render extends React.Component<propsType, IState> {
       );
     }
   }
+
+  private _onChange = (
+    value: any,
+    e?: React.MouseEvent<HTMLInputElement>,
+  ) => {
+    if(!this.state.field) {
+      return;
+    }
+    const type = this.props.fieldProps.validationRules && this.props.fieldProps.validationRules.type;
+    let _value = value;
+    if(type === validationTypes.String && typeof value === "number") {
+      _value = `${value}`;
+    }
+    // else if(type === validationTypes.String && typeof value === "number") {
+
+    if (this.props.onChange && this.props.fieldProps.value === undefined) this.props.onChange(_value, this.props.fieldProps.name, e);
+    if (this.props.fieldProps.onChange) this.props.fieldProps.onChange(_value, this.props.resetFields);
+    if (
+      this.props.validateOn === ValidateOnTypes.FieldChange &&
+      this.props.fieldProps.customValidation &&
+      this.props.updateCustomValidationMessage
+    ) {
+      this.props.updateCustomValidationMessage(
+        this.state.field.name,
+        this.props.fieldProps.customValidation(_value, this.props.fieldProps.validationRules),
+      );
+    }
+  }
+
+  private _onBlur = (
+    value: any,
+    e?: React.MouseEvent<HTMLInputElement>,
+  ) => {
+    if(!this.state.field) {
+      return;
+    }
+    const type = this.props.fieldProps.validationRules && this.props.fieldProps.validationRules.type;
+    let _value = value;
+    if(type === validationTypes.String && typeof value === "number") {
+      _value = `${value}`
+    }
+    if (this.props.onBlur && this.props.fieldProps.value === undefined) this.props.onBlur(_value, this.props.fieldProps.name, e);
+    if (this.props.fieldProps.onBlur) this.props.fieldProps.onBlur(_value, this.props.resetFields);
+    if (
+      this.props.validateOn === ValidateOnTypes.FieldBlur &&
+      this.props.fieldProps.customValidation &&
+      this.props.updateCustomValidationMessage
+    ) {
+      this.props.updateCustomValidationMessage(
+        this.state.field.name,
+        this.props.fieldProps.customValidation(_value, this.props.fieldProps.validationRules),
+      );
+    }
+  }
+
 }
