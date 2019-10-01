@@ -99,6 +99,7 @@ export default class Render extends React.Component<propsType, IState> {
         componentRef: this.props.fieldProps.componentRef,
         onChange: this._onChange,
         onBlur: this._onBlur,
+        localeString: this.props.fieldProps.localeString,
         label: !this.props.fieldProps.hideLabel && (showAsteriskOnRequired &&
           this.props.fieldProps.validationRules &&
           this.props.fieldProps.validationRules.required ?
@@ -117,7 +118,8 @@ export default class Render extends React.Component<propsType, IState> {
         this.props.fieldProps.label,
         this.props.fieldProps.validationRules,
         this.props.fieldProps.value,
-        this.props.fieldProps.autoTrimTrailingSpaces
+        this.props.fieldProps.autoTrimTrailingSpaces,
+        this.props.fieldProps.localeString,
       );
     }
   }

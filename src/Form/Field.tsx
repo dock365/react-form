@@ -24,6 +24,7 @@ export interface IFieldRenderProps {
   fetching?: boolean;
   readOnly?: boolean;
   componentRef?: any;
+  localeString?: boolean;
 }
 export interface IFieldProps {
   name: string;
@@ -42,6 +43,7 @@ export interface IFieldProps {
   readOnly?: boolean;
   componentRef?: any;
   autoTrimTrailingSpaces?: boolean;
+  localeString?: boolean;
 }
 export interface IFieldState {
   shouldUpdate: boolean;

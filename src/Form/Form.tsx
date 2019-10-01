@@ -9,6 +9,7 @@ import Validator, {
   validationTypes,
   IValidationResponse,
 } from "@dock365/validator";
+import { localeStringToNumber } from "../helpers/localeString";
 // import createReactContext, { Context, ProviderProps } from 'create-react-context';
 // import { Promise } from 'es6-promise';
 
@@ -66,6 +67,7 @@ export interface IField {
   validating?: boolean;
   promise?: Promise<void>;
   autoTrimTrailingSpaces?: boolean;
+  localeString?: boolean;
 }
 
 export interface IFormState {
@@ -91,6 +93,7 @@ export interface IFormContext {
     validationRules?: validationRules,
     value?: any,
     autoTrimTrailingSpaces?: boolean,
+    localeString?: boolean,
   ) => void;
   showAsteriskOnRequired?: boolean;
   resetFields?: (name?: string | string[]) => void;
@@ -169,7 +172,15 @@ export class Form extends React.Component<IFormProps, IFormState> {
     );
   }
 
-  private _initializeField(name: string, label?: string, _validationRules?: validationRules, value?: any, autoTrimTrailingSpaces?: boolean) {
+  private _initializeField(
+    name: string,
+    label?: string,
+    _validationRules?:
+      validationRules,
+    value?: any,
+    autoTrimTrailingSpaces?: boolean,
+    localeString?: boolean,
+  ) {
     if (!name) {
       return;
     }
@@ -190,6 +201,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
                 updated: false,
                 value,
                 autoTrimTrailingSpaces,
+                localeString,
               },
             ],
           }
@@ -214,7 +226,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
   ) {
     const fieldValue = this.state.fields.find(item => item.name === name);
     if (fieldValue) {
-      fieldValue.value = value;
+      fieldValue.value = fieldValue.localeString && value.localeString ? value.localeString() : value;
       this.setState(prevState => {
         return {
           fields: prevState.fields.map(item => item.name === fieldValue.name ? { ...fieldValue } : item),
@@ -233,7 +245,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
   ) {
     const fieldValue = this.state.fields.find(item => item.name === name);
     if (fieldValue) {
-      fieldValue.value = value;
+      fieldValue.value = fieldValue.localeString && value.localeString ? value.localeString() : value;
       if (this.props.validateOn === ValidateOnTypes.FieldBlur) {
         this._validateField(fieldValue);
       }
@@ -271,7 +283,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
     const fields = this._trimmedValues(this.state.fields)
 
     const validating = fields.map((field) => field.promise);
-    const event = {...e};
+    const event = { ...e };
 
     await Promise.all(validating)
 
@@ -328,14 +340,19 @@ export class Form extends React.Component<IFormProps, IFormState> {
           result =
             this.validator[validationTypes.String](field.label || field.name, field.value || "", field.validationRules);
           break;
-        case validationTypes.Number:
+        case validationTypes.Number: {
+          const value = field.localeString ? localeStringToNumber(field.value) : field.value;
           result =
-            this.validator[validationTypes.Number](field.label || field.name, field.value, field.validationRules);
+            this.validator[validationTypes.Number](field.label || field.name, value, field.validationRules);
           break;
-        case validationTypes.Date:
+        }
+        case validationTypes.Date: {
+          const value = field.localeString ? new Date(field.value) : field.value;
+
           result =
-            this.validator[validationTypes.Date](field.label || field.name, field.value, field.validationRules);
+            this.validator[validationTypes.Date](field.label || field.name, value, field.validationRules);
           break;
+        }
         case validationTypes.Email:
           result =
             this.validator[validationTypes.Email](field.label || field.name, field.value || "", field.validationRules);
