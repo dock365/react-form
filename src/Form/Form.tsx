@@ -226,7 +226,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
   ) {
     const fieldValue = this.state.fields.find(item => item.name === name);
     if (fieldValue) {
-      fieldValue.value = fieldValue.localeString && value.localeString ? value.localeString() : value;
+      fieldValue.value = fieldValue.localeString && value.toLocaleString ? value.toLocaleString() : value;
       this.setState(prevState => {
         return {
           fields: prevState.fields.map(item => item.name === fieldValue.name ? { ...fieldValue } : item),
@@ -245,7 +245,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
   ) {
     const fieldValue = this.state.fields.find(item => item.name === name);
     if (fieldValue) {
-      fieldValue.value = fieldValue.localeString && value.localeString ? value.localeString() : value;
+      fieldValue.value = fieldValue.localeString && value.toLocaleString ? value.toLocaleString() : value;
       if (this.props.validateOn === ValidateOnTypes.FieldBlur) {
         this._validateField(fieldValue);
       }
@@ -341,7 +341,8 @@ export class Form extends React.Component<IFormProps, IFormState> {
             this.validator[validationTypes.String](field.label || field.name, field.value || "", field.validationRules);
           break;
         case validationTypes.Number: {
-          const value = field.localeString ? localeStringToNumber(field.value) : field.value;
+          let value = field.localeString ? localeStringToNumber(field.value) : field.value;
+          value = Number(value) || value;
           result =
             this.validator[validationTypes.Number](field.label || field.name, value, field.validationRules);
           break;
