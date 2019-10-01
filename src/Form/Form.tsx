@@ -226,7 +226,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
   ) {
     const fieldValue = this.state.fields.find(item => item.name === name);
     if (fieldValue) {
-      fieldValue.value = fieldValue.localeString && value.toLocaleString ? value.toLocaleString() : value;
+      fieldValue.value = value;
       this.setState(prevState => {
         return {
           fields: prevState.fields.map(item => item.name === fieldValue.name ? { ...fieldValue } : item),
@@ -239,13 +239,23 @@ export class Form extends React.Component<IFormProps, IFormState> {
   }
 
   private _onFieldBlur(
-    value: any,
+    value: string,
     name: string,
     e?: React.MouseEvent<HTMLInputElement>,
   ) {
     const fieldValue = this.state.fields.find(item => item.name === name);
     if (fieldValue) {
-      fieldValue.value = fieldValue.localeString && value.toLocaleString ? value.toLocaleString() : value;
+      if (fieldValue.validationRules && fieldValue.validationRules.type === validationTypes.Number) {
+        const number = Number(value.split(",").join(""))
+        fieldValue.value = fieldValue.localeString && (number || number === 0) && number.toLocaleString ? number.toLocaleString() : value;
+      } else {
+        fieldValue.value = fieldValue.localeString && value.toLocaleString ? value.toLocaleString() : value;
+      }
+      this.setState(prevState => {
+        return {
+          fields: prevState.fields.map(item => item.name === fieldValue.name ? { ...fieldValue } : item),
+        };
+      });
       if (this.props.validateOn === ValidateOnTypes.FieldBlur) {
         this._validateField(fieldValue);
       }
