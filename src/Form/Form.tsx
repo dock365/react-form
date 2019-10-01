@@ -246,7 +246,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
     const fieldValue = this.state.fields.find(item => item.name === name);
     if (fieldValue) {
       if (fieldValue.validationRules && fieldValue.validationRules.type === validationTypes.Number) {
-        const number = value ? Number(value.split(",").join("")) : value;
+        const number = value && typeof value === "string" ? Number(value.split(",").join("")) : value;
         fieldValue.value = fieldValue.localeString && (number || number === 0) && number.toLocaleString ? number.toLocaleString() : value;
       } else {
         fieldValue.value = fieldValue.localeString && value.toLocaleString ? value.toLocaleString() : value;
