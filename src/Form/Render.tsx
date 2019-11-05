@@ -86,28 +86,32 @@ export default class Render extends React.Component<propsType, IState> {
     if (this.props.fieldProps.errorMessages)
       errors = [...errors, ...this.props.fieldProps.errorMessages];
 
+    const Render = this.props.fieldProps.render;
+
+    const props = {
+      name: this.props.fieldProps.name,
+      placeholder: this.props.fieldProps.placeholder,
+      defaultValue: this.props.fieldProps.defaultValue,
+      value: field && field.value,
+      customProps: this.props.fieldProps.customProps,
+      resetFields,
+      fetching: field && field.validating,
+      readOnly: this.props.readOnly || this.props.fieldProps.readOnly,
+      componentRef: this.props.fieldProps.componentRef,
+      onChange: this._onChange,
+      onBlur: this._onBlur,
+      localeString: this.props.fieldProps.localeString,
+      label: !this.props.fieldProps.hideLabel && (showAsteriskOnRequired &&
+        this.props.fieldProps.validationRules &&
+        this.props.fieldProps.validationRules.required ?
+        `${this.props.fieldProps.label}*` :
+        this.props.fieldProps.label) || undefined,
+      validationRules: this.props.fieldProps.validationRules,
+      errors,
+    };
+
     return (
-      React.createElement(this.props.fieldProps.render, {
-        name: this.props.fieldProps.name,
-        placeholder: this.props.fieldProps.placeholder,
-        defaultValue: this.props.fieldProps.defaultValue,
-        value: field && field.value,
-        customProps: this.props.fieldProps.customProps,
-        resetFields,
-        fetching: field && field.validating,
-        readOnly: this.props.readOnly || this.props.fieldProps.readOnly,
-        componentRef: this.props.fieldProps.componentRef,
-        onChange: this._onChange,
-        onBlur: this._onBlur,
-        localeString: this.props.fieldProps.localeString,
-        label: !this.props.fieldProps.hideLabel && (showAsteriskOnRequired &&
-          this.props.fieldProps.validationRules &&
-          this.props.fieldProps.validationRules.required ?
-          `${this.props.fieldProps.label}*` :
-          this.props.fieldProps.label) || undefined,
-        validationRules: this.props.fieldProps.validationRules,
-        errors,
-      })
+      <Render {...props} />
     );
   }
 
@@ -128,12 +132,12 @@ export default class Render extends React.Component<propsType, IState> {
     value: any,
     e?: React.MouseEvent<HTMLInputElement>,
   ) => {
-    if(!this.state.field) {
+    if (!this.state.field) {
       return;
     }
     const type = this.props.fieldProps.validationRules && this.props.fieldProps.validationRules.type;
     let _value = value;
-    if(type === validationTypes.String && typeof value === "number") {
+    if (type === validationTypes.String && typeof value === "number") {
       _value = `${value}`;
     }
     // else if(type === validationTypes.String && typeof value === "number") {
@@ -156,12 +160,12 @@ export default class Render extends React.Component<propsType, IState> {
     value: any,
     e?: React.MouseEvent<HTMLInputElement>,
   ) => {
-    if(!this.state.field) {
+    if (!this.state.field) {
       return;
     }
     const type = this.props.fieldProps.validationRules && this.props.fieldProps.validationRules.type;
     let _value = value;
-    if(type === validationTypes.String && typeof value === "number") {
+    if (type === validationTypes.String && typeof value === "number") {
       _value = `${value}`
     }
     if (this.props.onBlur && this.props.fieldProps.value === undefined) this.props.onBlur(_value, this.props.fieldProps.name, e);
