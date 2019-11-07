@@ -139,8 +139,6 @@ export default class Render extends React.Component<propsType, IState> {
     let _value = value;
     if (type === validationTypes.String && typeof value === "number") {
       _value = `${value}`;
-    } else if (type === validationTypes.Number) {
-      _value = Number(value) || value;
     }
     // else if(type === validationTypes.String && typeof value === "number") {
 
