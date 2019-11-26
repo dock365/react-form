@@ -352,7 +352,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
           break;
         case validationTypes.Number: {
           let value = field.localeString ? localeStringToNumber(field.value) : field.value;
-          value = Number(value) || Number(value) === 0 ? Number(value) : value;
+          value = value !== "" && (Number(value) || Number(value) === 0) ? Number(value) : value;
           result =
             this.validator[validationTypes.Number](field.label || field.name, value, field.validationRules);
           break;
