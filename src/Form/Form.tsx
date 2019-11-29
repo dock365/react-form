@@ -27,7 +27,7 @@ export interface IFormProps {
     resetFields?: (name?: string | string[]) => void,
   ) => void;
   onBlur?: (
-    e: FormEvent<HTMLFormElement>,
+    e: FormEvent<HTMLFormElement> | null,
     values: IFieldValues,
     validationStatus?: boolean,
     resetFields?: (name?: string | string[]) => void,
@@ -163,7 +163,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
         <form
           onSubmit={this._onSubmit}
           onChange={this._onFormChange}
-          onBlur={this._onFormBlur}
+          // onBlur={this._onFormBlur}
           ref={this.props.formRef}
         >
           {this.props.children}
@@ -255,7 +255,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
         return {
           fields: prevState.fields.map(item => item.name === fieldValue.name ? { ...fieldValue } : item),
         };
-      });
+      }, this._onFormBlur);
       if (this.props.validateOn === ValidateOnTypes.FieldBlur) {
         this._validateField(fieldValue);
       }
@@ -270,14 +270,14 @@ export class Form extends React.Component<IFormProps, IFormState> {
     }
   }
 
-  private _onFormBlur(e: FormEvent<HTMLFormElement>) {
+  private _onFormBlur() {
 
     if (this.props.validateOn && this.props.validateOn === ValidateOnTypes.FieldBlur && this.props.onBlur) {
       const fields = this._trimmedValues(this.state.fields)
-      this.props.onBlur(e, this._structuredValues(fields), this._validateAll(), this._resetFields);
+      this.props.onBlur(null, this._structuredValues(fields), this._validateAll(), this._resetFields);
     } else if (this.props.onBlur) {
       const fields = this._trimmedValues(this.state.fields)
-      this.props.onBlur(e, this._structuredValues(fields), true, this._resetFields);
+      this.props.onBlur(null, this._structuredValues(fields), true, this._resetFields);
     }
   }
 
