@@ -272,7 +272,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
 
   private _onFormBlur() {
 
-    if (this.props.validateOn && this.props.validateOn === ValidateOnTypes.FieldBlur && this.props.onBlur) {
+    if (this.props.onBlur && this.props.validateOn && this.props.validateOn === ValidateOnTypes.FieldBlur) {
       const fields = this._trimmedValues(this.state.fields)
       this.props.onBlur(null, this._structuredValues(fields), this._validateAll(), this._resetFields);
     } else if (this.props.onBlur) {
