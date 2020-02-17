@@ -379,6 +379,10 @@ export class Form extends React.Component<IFormProps, IFormState> {
           result =
             validator[validationTypes.Array](field.label || field.name, field.value || "", field.validationRules);
           break;
+        case validationTypes.RegEx:
+          result =
+            validator[validationTypes.RegEx](field.label || field.name, field.value || "", field.validationRules);
+          break;
 
         default:
           result = {
