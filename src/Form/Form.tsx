@@ -1,4 +1,4 @@
-import React, { FormEvent, ReactHTMLElement, Context, createContext } from "react";
+import React, { FormEvent, Context, createContext } from "react";
 import Validator, {
   IValidationFailMessages,
   IStringValidationOptions,
@@ -6,13 +6,11 @@ import Validator, {
   IDateValidationOptions,
   IEmailValidationOptions,
   IArrayValidationOptions,
+  IRegExValidationOptions,
   validationTypes,
   IValidationResponse,
 } from "@dock365/validator";
 import { localeStringToNumber } from "../helpers/localeString";
-// import createReactContext, { Context, ProviderProps } from 'create-react-context';
-// import { Promise } from 'es6-promise';
-
 
 export enum ValidateOnTypes {
   Submit = 1,
@@ -54,6 +52,7 @@ export type validationRules =
   (INumberValidationOptions & { type: validationTypes.Number }) |
   (IDateValidationOptions & { type: validationTypes.Date }) |
   (IArrayValidationOptions & { type: validationTypes.Array }) |
+  (IRegExValidationOptions & { type: validationTypes.RegEx }) |
   (IEmailValidationOptions & { type: validationTypes.Email });
 
 export interface IField {
@@ -63,6 +62,7 @@ export interface IField {
   errors: string[];
   customErrors: string[];
   validationRules?: validationRules;
+  validationFailMessages?: IValidationFailMessages;
   updated?: boolean;
   validating?: boolean;
   promise?: Promise<void>;
@@ -106,7 +106,6 @@ export interface IFormContext {
 export const FormContext: Context<IFormContext> = createContext({});
 
 export class Form extends React.Component<IFormProps, IFormState> {
-  private validator: Validator;
   constructor(props: IFormProps) {
     super(props);
 
@@ -114,10 +113,6 @@ export class Form extends React.Component<IFormProps, IFormState> {
       fields: [],
       hasError: false,
     };
-
-    this.validator = new Validator({
-      failMessages: this.props.validationMessages,
-    });
 
     this._initializeField = this._initializeField.bind(this);
     this._onFieldChange = this._onFieldChange.bind(this);
@@ -167,7 +162,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
           ref={this.props.formRef}
         >
           {this.props.children}
-        </form >
+        </form>
       </FormContext.Provider>
     );
   }
@@ -212,7 +207,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
         prevState => (
           {
             fields: prevState.fields
-              .map(field => field.name === name ? { ...field, label, validationRules: _validationRules } : field),
+              .map(field => field.name === name ? {...field, label, validationRules: _validationRules} : field),
           }
         ),
       );
@@ -229,7 +224,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
       fieldValue.value = value;
       this.setState(prevState => {
         return {
-          fields: prevState.fields.map(item => item.name === fieldValue.name ? { ...fieldValue } : item),
+          fields: prevState.fields.map(item => item.name === fieldValue.name ? {...fieldValue} : item),
         };
       });
       if (this.props.validateOn === ValidateOnTypes.FieldChange) {
@@ -239,21 +234,24 @@ export class Form extends React.Component<IFormProps, IFormState> {
   }
 
   private _onFieldBlur(
-    value: string,
+    value: any,
     name: string,
     e?: React.MouseEvent<HTMLInputElement>,
   ) {
     const fieldValue = this.state.fields.find(item => item.name === name);
     if (fieldValue) {
       if (fieldValue.validationRules && fieldValue.validationRules.type === validationTypes.Number) {
-        const number = value && typeof value === "string" ? Number(value.split(",").join("")) : value;
-        fieldValue.value = fieldValue.localeString && (number || number === 0) && number.toLocaleString ? number.toLocaleString() : value;
+        const numberAsNumber = value && typeof value === "string" ? Number(value.split(",").join("")) : value;
+        fieldValue.value = fieldValue.localeString &&
+        (numberAsNumber || numberAsNumber === 0) &&
+        numberAsNumber.toLocaleString ?
+          numberAsNumber.toLocaleString() : value;
       } else {
         fieldValue.value = fieldValue.localeString && value.toLocaleString ? value.toLocaleString() : value;
       }
       this.setState(prevState => {
         return {
-          fields: prevState.fields.map(item => item.name === fieldValue.name ? { ...fieldValue } : item),
+          fields: prevState.fields.map(item => item.name === fieldValue.name ? {...fieldValue} : item),
         };
       }, this._onFormBlur);
       if (this.props.validateOn === ValidateOnTypes.FieldBlur) {
@@ -265,7 +263,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
   private _onFormChange(e: FormEvent<HTMLFormElement>) {
 
     if (this.props.onChange) {
-      const fields = this._trimmedValues(this.state.fields)
+      const fields = this._trimmedValues(this.state.fields);
       this.props.onChange(e, this._structuredValues(fields), this._resetFields);
     }
   }
@@ -273,10 +271,10 @@ export class Form extends React.Component<IFormProps, IFormState> {
   private _onFormBlur() {
 
     if (this.props.onBlur && this.props.validateOn && this.props.validateOn === ValidateOnTypes.FieldBlur) {
-      const fields = this._trimmedValues(this.state.fields)
+      const fields = this._trimmedValues(this.state.fields);
       this.props.onBlur(null, this._structuredValues(fields), this._validateAll(), this._resetFields);
     } else if (this.props.onBlur) {
-      const fields = this._trimmedValues(this.state.fields)
+      const fields = this._trimmedValues(this.state.fields);
       this.props.onBlur(null, this._structuredValues(fields), true, this._resetFields);
     }
   }
@@ -284,18 +282,18 @@ export class Form extends React.Component<IFormProps, IFormState> {
   private _unmountField(name: string) {
     this.setState(prevState => ({
       fields: prevState.fields.filter(field => field.name !== name),
-    }))
+    }));
   }
 
   private async _onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const fields = this._trimmedValues(this.state.fields)
+    const fields = this._trimmedValues(this.state.fields);
 
     const validating = fields.map((field) => field.promise);
-    const event = { ...e };
+    const event = {...e};
 
-    await Promise.all(validating)
+    await Promise.all(validating);
 
     if (this.props.validateOn) {
       this._validateAll(() => {
@@ -344,33 +342,39 @@ export class Form extends React.Component<IFormProps, IFormState> {
 
   private _validateField(field: IField) {
     if (field.validationRules && field.validationRules.type) {
+      const validator = new Validator({
+                                        failMessages: {
+                                          ...(this.props.validationMessages || {}),
+                                          ...(field.validationFailMessages || {}),
+                                        },
+                                      });
       let result: IValidationResponse;
       switch (field.validationRules.type) {
         case validationTypes.String:
           result =
-            this.validator[validationTypes.String](field.label || field.name, field.value || "", field.validationRules);
+            validator[validationTypes.String](field.label || field.name, field.value || "", field.validationRules);
           break;
         case validationTypes.Number: {
           let value = field.localeString ? localeStringToNumber(`${field.value}`) : field.value;
           value = value !== "" && (Number(value) || Number(value) === 0) ? Number(value) : value;
           result =
-            this.validator[validationTypes.Number](field.label || field.name, value, field.validationRules);
+            validator[validationTypes.Number](field.label || field.name, value, field.validationRules);
           break;
         }
         case validationTypes.Date: {
           const value = field.localeString ? new Date(field.value) : field.value;
 
           result =
-            this.validator[validationTypes.Date](field.label || field.name, value, field.validationRules);
+            validator[validationTypes.Date](field.label || field.name, value, field.validationRules);
           break;
         }
         case validationTypes.Email:
           result =
-            this.validator[validationTypes.Email](field.label || field.name, field.value || "", field.validationRules);
+            validator[validationTypes.Email](field.label || field.name, field.value || "", field.validationRules);
           break;
         case validationTypes.Array:
           result =
-            this.validator[validationTypes.Array](field.label || field.name, field.value || "", field.validationRules);
+            validator[validationTypes.Array](field.label || field.name, field.value || "", field.validationRules);
           break;
 
         default:
@@ -384,7 +388,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
         this.setState(prevState => {
           return {
             fields: [
-              ...prevState.fields.map(item => item.name === field.name ? { ...item, errors: result.messages } : item),
+              ...prevState.fields.map(item => item.name === field.name ? {...item, errors: result.messages} : item),
             ],
           };
         });
@@ -394,7 +398,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
       this.setState(prevState => {
         return {
           fields: [
-            ...prevState.fields.map(item => item.name === field.name ? { ...item, errors: [] } : item),
+            ...prevState.fields.map(item => item.name === field.name ? {...item, errors: []} : item),
           ],
         };
       });
@@ -408,13 +412,13 @@ export class Form extends React.Component<IFormProps, IFormState> {
       const promise = messages.then((errors) => {
         this.setState(prevState => ({
           fields: prevState.fields
-            .map(item => item.name === name ? { ...item, customErrors: errors || [] } : item),
+            .map(item => item.name === name ? {...item, customErrors: errors || []} : item),
         }));
       });
 
       this.setState(prevState => ({
         fields: prevState.fields
-          .map(item => item.name === name ? { ...item, promise } : item),
+          .map(item => item.name === name ? {...item, promise} : item),
       }));
 
       return promise;
@@ -427,19 +431,19 @@ export class Form extends React.Component<IFormProps, IFormState> {
     if (name) {
       if (typeof name === "string") {
         this.setState(prevState => ({
-          fields: prevState.fields.map(field => field.name === name ? { ...field, value: undefined } : field),
+          fields: prevState.fields.map(field => field.name === name ? {...field, value: undefined} : field),
         }));
       } else {
         this.setState(prevState => {
           let fields: IField[] = prevState.fields;
           name.forEach(_name => {
-            fields = fields.map(field => field.name === _name ? { ...field, value: undefined } : field);
+            fields = fields.map(field => field.name === _name ? {...field, value: undefined} : field);
           });
         });
       }
     } else {
       this.setState((prevState) => ({
-        fields: prevState.fields.map(field => ({ ...field, value: undefined })),
+        fields: prevState.fields.map(field => ({...field, value: undefined})),
       }));
     }
   }
