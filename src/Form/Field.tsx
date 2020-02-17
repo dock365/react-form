@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FormContext, validationRules, ValidateOnTypes } from './Form';
-import { validationTypes } from '@dock365/validator';
+import { IValidationFailMessages, validationTypes } from '@dock365/validator';
 import Render from './Render';
 
 export interface IFieldRenderProps {
@@ -44,6 +44,7 @@ export interface IFieldProps {
   componentRef?: any;
   autoTrimTrailingSpaces?: boolean;
   localeString?: boolean;
+  validationFailMessages?: IValidationFailMessages;
 }
 export interface IFieldState {
   shouldUpdate: boolean;

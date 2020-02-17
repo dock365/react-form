@@ -94,6 +94,7 @@ export interface IFormContext {
     value?: any,
     autoTrimTrailingSpaces?: boolean,
     localeString?: boolean,
+    validationFailMessages?: IValidationFailMessages,
   ) => void;
   showAsteriskOnRequired?: boolean;
   resetFields?: (name?: string | string[]) => void;
@@ -175,6 +176,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
     value?: any,
     autoTrimTrailingSpaces?: boolean,
     localeString?: boolean,
+    validationFailMessages?: IValidationFailMessages,
   ) {
     if (!name) {
       return;
@@ -197,6 +199,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
                 value,
                 autoTrimTrailingSpaces,
                 localeString,
+                validationFailMessages,
               },
             ],
           }

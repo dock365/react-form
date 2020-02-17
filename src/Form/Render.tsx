@@ -124,6 +124,7 @@ export default class Render extends React.Component<propsType, IState> {
         this.props.fieldProps.value,
         this.props.fieldProps.autoTrimTrailingSpaces,
         this.props.fieldProps.localeString,
+        this.props.fieldProps.validationFailMessages,
       );
     }
   }
