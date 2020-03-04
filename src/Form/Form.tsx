@@ -41,6 +41,7 @@ export interface IFormProps {
   formRef?: (ref: HTMLFormElement | null) => void;
   values?: IFieldValues;
   readOnly?: boolean;
+  className?: string;
 }
 
 export interface IFieldValues {
@@ -161,6 +162,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
           onChange={this._onFormChange}
           // onBlur={this._onFormBlur}
           ref={this.props.formRef}
+          className={this.props.className}
         >
           {this.props.children}
         </form>
